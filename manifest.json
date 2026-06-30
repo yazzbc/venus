@@ -1,0 +1,14 @@
+{
+  "name": "Venus · Entrenamiento",
+  "short_name": "Venus",
+  "description": "Tu app de seguimiento de entrenamiento.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF9F7",
+  "theme_color": "#FBF9F7",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
