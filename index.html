@@ -164,7 +164,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .prote .num small{font-family:var(--font-mono);font-size:11px;color:var(--ink-600);letter-spacing:.03em;}
 .bar{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden;}
 .bar i{display:block;height:100%;border-radius:5px;background:var(--g-aurora-bar);transition:width .5s var(--ease);}
-.bar i.full{background:linear-gradient(90deg,var(--ok),color-mix(in srgb,var(--ok) 55%,white 45%));}
+.okmark{color:var(--ok);font-family:var(--font-body);font-size:17px;font-weight:700;}
+.party{margin-top:12px;background:var(--surface);border-radius:var(--r-card);padding:18px 20px;box-shadow:var(--shadow-1);position:relative;text-align:center;}
+.party::before{content:"";position:absolute;inset:-1.5px;border-radius:var(--r-card);padding:1.5px;background:var(--g-aurora-bar);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.party b{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em;display:block;}
+.party span{font-size:13px;color:var(--ink-600);display:block;margin-top:4px;}
 .prote .hint{font-size:12.5px;color:var(--ink-600);margin-top:9px;}
 
 /* ---------- Semana (tira) ---------- */
@@ -253,7 +258,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .ex-titles{flex:1;min-width:0;}
 .ex-name{font-size:16px;font-weight:650;letter-spacing:-.01em;line-height:1.25;}
 .ex-target{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--ink-600);margin-top:4px;text-transform:uppercase;}
-.ex-note{font-size:12.5px;color:var(--ink-600);background:var(--surface-2);border-radius:var(--r-el);padding:10px 12px;margin:0 16px 8px;line-height:1.5;}
+.ex-note{font-size:13px;color:var(--ink-600);background:var(--surface-2);border-radius:var(--r-el);padding:10px 12px;margin:0 16px 8px;line-height:1.5;}
 .lastline{font-size:12px;margin:4px 16px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .lastline b{font-family:var(--font-mono);font-weight:600;color:var(--ink-600);text-transform:uppercase;letter-spacing:.06em;font-size:9.5px;}
 .lastline .ls-set{background:var(--surface-2);border-radius:6px;padding:3px 8px;font-weight:600;color:var(--ink-600);font-variant-numeric:tabular-nums;font-size:12px;}
@@ -494,6 +499,7 @@ textarea::placeholder{color:var(--ink-400);}
     <span class="lbl" id="weekCount" style="color:var(--accent-ink)"></span>
   </div>
   <div class="week-strip fadeup" id="weekStrip" style="animation-delay:.15s"></div>
+  <div id="weekParty"></div>
 
   <div class="section-hd fadeup" style="animation-delay:.2s">
     <span class="lbl">Progreso</span>
@@ -852,8 +858,8 @@ function renderNutriCard(){
   const tot=Math.round(todayProtein());
   const pct=Math.min(100, Math.round(tot/PROTEIN_GOAL*100));
   card.innerHTML=`
-    <div class="top"><span class="lbl">Proteína · Hoy</span><span class="num">${tot}<small> / ${PROTEIN_GOAL} G</small></span></div>
-    <div class="bar"><i class="${pct>=100?'full':''}" style="width:${pct}%"></i></div>
+    <div class="top"><span class="lbl">Proteína · Hoy</span><span class="num">${tot}<small> / ${PROTEIN_GOAL} G</small>${tot>=PROTEIN_GOAL?' <span class="okmark">✓</span>':''}</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
     <div class="hint">${tot>=PROTEIN_GOAL?"¡Objetivo cumplido! 🎉":(todayFoods().length?`Te faltan ${PROTEIN_GOAL-tot} g · toca para registrar`:"Toca para registrar tu primera comida del día")}</div>`;
 }
 
@@ -871,7 +877,12 @@ function renderWeek(){
     el.onclick=()=>{ haptic(); onCardTap(k); };
     strip.appendChild(el);
   });
-  $("#weekCount").textContent=done>0?`${done} de 4 ✓`:`0 de 4`;
+  $("#weekCount").textContent=done>=4?`4 de 4 🎉`:(done>0?`${done} de 4 ✓`:`0 de 4`);
+  // Celebración pico-final: la semana completa se festeja
+  const party=$("#weekParty");
+  party.innerHTML = done>=4
+    ? `<div class="party fadeup"><b>¡Semana completa, Yaz!</b><span>Las 4 sesiones hechas. Así se construye un hábito — a por la siguiente. 💜</span></div>`
+    : "";
 }
 
 function renderSummary(){
@@ -1013,9 +1024,11 @@ function renderProgressView(){
     body.appendChild(tiles);
 
     // progresión por ejercicio (orden de rutina, ≥2 puntos)
+    // Los 4 primeros visibles; el resto colapsado tras "Mostrar más"
     const series=exerciseSeries();
     const seen=new Set();
     let idx=0;
+    const chartCards=[];
     ORDER.flatMap(k=>ROUTINE[k].exercises.map(e=>canon(e.n))).forEach(n=>{
       if(seen.has(n)) return; seen.add(n);
       const pts=series[n];
@@ -1025,8 +1038,19 @@ function renderProgressView(){
       card.innerHTML=`<div class="chart-hd"><span class="lbl">${escapeHtml(n)}</span>
         <span class="delta${delta>0?"":" neutral"}">${delta>0?"▲ +"+delta+" kg":delta<0?"▼ "+delta+" kg":"estable"}</span></div>
         ${lineChartSVG(pts, idx++)}`;
-      body.appendChild(card);
+      chartCards.push(card);
     });
+    chartCards.slice(0,4).forEach(c=>body.appendChild(c));
+    if(chartCards.length>4){
+      const more=document.createElement("div"); more.className="hidden";
+      chartCards.slice(4).forEach(c=>more.appendChild(c));
+      const btn=document.createElement("button");
+      btn.className="ghost-link"; btn.style.cssText="display:flex;margin:4px auto 0;padding:0 16px;";
+      btn.textContent=`Mostrar ${chartCards.length-4} ejercicios más ↓`;
+      btn.onclick=()=>{ haptic(); more.classList.remove("hidden"); btn.remove(); };
+      body.appendChild(btn);
+      body.appendChild(more);
+    }
 
     // proteína 7 días
     if(Object.keys(nutrition).length){
@@ -1109,7 +1133,7 @@ function renderNutriSheet(){
   const pct=Math.min(100,Math.round(tot/PROTEIN_GOAL*100));
   const d=new Date();
   $("#nutriSub").textContent=`${d.getDate()} ${MONTHS[d.getMonth()].toLowerCase()} · ${tot} de ${PROTEIN_GOAL} g${tot>=PROTEIN_GOAL?" · ¡conseguido! 🎉":""}`;
-  const fill=$("#nutriFillSheet"); fill.style.width=pct+"%"; fill.classList.toggle("full",pct>=100);
+  const fill=$("#nutriFillSheet"); fill.style.width=pct+"%";
   const chips=$("#nutriChips"); chips.innerHTML="";
   QUICK_FOODS.forEach(f=>{
     const b=document.createElement("button");
