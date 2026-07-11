@@ -21,7 +21,7 @@
   --aurora-peach:#FFC08D; --aurora-rose:#F49BC0; --aurora-lilac:#BCA8F4; --aurora-amber:#FFDCA6;
   --accent:#6D56E0; --accent-ink:#4E3DB2; --accent-soft:#EFEAFB;
   --data-violet:#6D56E0; --data-lilac:#7C63D2;
-  --ok:#2E7D5B; --ok-soft:#E3F2EA; --warn:#A15C13; --warn-soft:#FBEFD9; --danger:#C23B3B; --danger-soft:#FAE7E4;
+  --ok:#4F7A45; --ok-soft:#E7EFDD; --warn:#A15C13; --warn-soft:#FBEFD9; --danger:#C23B3B; --danger-soft:#FAE7E4;
   --g-aurora-hero:
     radial-gradient(120% 90% at 18% -12%, var(--aurora-amber) 0%, transparent 58%),
     radial-gradient(130% 100% at 85% -22%, var(--aurora-rose) 0%, transparent 55%),
@@ -47,7 +47,7 @@
     --aurora-peach:#E0995F; --aurora-rose:#C97BA2; --aurora-lilac:#9280D4; --aurora-amber:#D8B276;
     --accent:#A091F5; --accent-ink:#C7BCFB; --accent-soft:#2C2545;
     --data-violet:#9280D4; --data-lilac:#9280D4;
-    --ok:#79CDB8; --ok-soft:#17342A; --warn:#F0C088; --warn-soft:#3A2B14; --danger:#F09B93; --danger-soft:#42201D;
+    --ok:#8FC17A; --ok-soft:#232B1D; --warn:#F0C088; --warn-soft:#3A2B14; --danger:#F09B93; --danger-soft:#42201D;
     --shadow-1:0 1px 2px rgba(0,0,0,.35),0 4px 10px rgba(0,0,0,.30);
     --shadow-2:0 2px 4px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.45);
     --aurora-op:.34;
@@ -56,6 +56,7 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{background:var(--canvas);color:var(--ink-900);font-family:var(--font-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
 body{padding:0 0 120px;overscroll-behavior-y:contain;position:relative;font-size:16px;line-height:1.5;}
+body.sheet-open{overflow:hidden;position:fixed;left:0;right:0;width:100%;}
 body::before{content:"";position:fixed;inset:0 0 auto;height:360px;z-index:-1;pointer-events:none;
   background:
     radial-gradient(560px 320px at calc(50% - 150px) -90px, var(--aurora-amber) 0%, transparent 66%),
@@ -145,7 +146,7 @@ body.in-session #sessBar{display:block;}
 .prote .num small{font-family:var(--font-mono);font-size:11px;color:var(--ink-600);letter-spacing:.03em;}
 .bar{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden;}
 .bar i{display:block;height:100%;border-radius:5px;background:var(--g-aurora-bar);transition:width .5s var(--ease);}
-.bar i.full{background:linear-gradient(90deg,#4FA08A,#34C759);}
+.bar i.full{background:linear-gradient(90deg,var(--ok),color-mix(in srgb,var(--ok) 55%,white 45%));}
 .prote .hint{font-size:12.5px;color:var(--ink-600);margin-top:9px;}
 
 /* ---------- Semana (tira) ---------- */
@@ -374,7 +375,7 @@ textarea::placeholder{color:var(--ink-400);}
   background:var(--surface-ink);color:var(--canvas);font-size:14px;font-weight:600;padding:13px 20px;border-radius:var(--r-el);box-shadow:var(--shadow-2);
   display:flex;align-items:center;gap:9px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s var(--ease);max-width:88vw;}
 .toast.show{opacity:1;transform:translateY(-8px);}
-.toast svg{width:17px;height:17px;stroke:#5BD69E;stroke-width:2.6;flex:none;}
+.toast svg{width:17px;height:17px;stroke:var(--ok);stroke-width:2.6;flex:none;}
 
 /* ---------- Rest timer (arriba, dentro del header pegajoso) ---------- */
 .rest{display:none;max-width:540px;margin:12px auto 0;}
@@ -1179,7 +1180,7 @@ function buildSessionUI(key, opts={}){
         const phR = ls && ls.r ? ls.r : "reps";
         rows+=`<div class="set-row ${s&&s.done?'filled':''}" data-si="${si}">
           <div class="set-no${isW?' warm':''}">${isW?"C":wn}</div>
-          <div class="cell"><input class="${ls&&ls.w?'ghost':''}" type="text" inputmode="decimal" value="${v('w')}" placeholder="${phW}" data-f="w" data-ei="${ei}" data-si="${si}" ${dis}></div>
+          <div class="cell"><input class="${ls&&ls.w?'ghost':''}" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" value="${v('w')}" placeholder="${phW}" data-f="w" data-ei="${ei}" data-si="${si}" ${dis}></div>
           <div class="cell"><input class="${ls&&ls.r?'ghost':''}" type="number" inputmode="numeric" value="${v('r')}" placeholder="${phR}" data-f="r" data-ei="${ei}" data-si="${si}" ${dis}></div>
           <div class="cell"><input type="number" inputmode="numeric" value="${v('rir')}" placeholder="RIR" data-f="rir" data-ei="${ei}" data-si="${si}" ${dis}></div>
           ${preview?'<div class="tick" style="opacity:.25"></div>':'<button class="tick" data-ei="'+ei+'" data-si="'+si+'" aria-label="Completar serie"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5"/></svg></button>'}
@@ -1187,7 +1188,7 @@ function buildSessionUI(key, opts={}){
       }
       const hasWarm = editing && current.exercises[ei].sets.some(x=>x.warm);
       const actions = editing ? `<div class="set-actions">
-          ${(ei<3 && !hasWarm)?`<button class="set-act wu" data-ei="${ei}">🔥 Calentamiento</button>`:''}
+          ${(ei<3 && !hasWarm)?`<button class="set-act wu" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg>Calentamiento</button>`:''}
           <button class="set-act add" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14"/></svg>Añadir serie</button>
           ${setCount>1?`<button class="set-act rm" data-ei="${ei}" aria-label="Quitar última serie"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14"/></svg></button>`:''}
         </div>` : "";
@@ -1551,8 +1552,21 @@ function importData(file){
 /* ============================================================
    SHEETS / TOAST
    ============================================================ */
-function openSheet(sel){ $("#scrim").classList.add("open"); $(sel).classList.add("open"); }
-function closeSheet(){ $("#scrim").classList.remove("open"); $$(".sheet").forEach(s=>s.classList.remove("open")); }
+/* Bloquea el scroll de fondo con las hojas abiertas, preservando la posición
+   (position:fixed sin "top" guardado saltaría siempre al inicio de la página). */
+let scrollLockY=0;
+function lockScroll(){
+  scrollLockY=window.scrollY;
+  document.body.style.top=(-scrollLockY)+"px";
+  document.body.classList.add("sheet-open");
+}
+function unlockScroll(){
+  document.body.classList.remove("sheet-open");
+  document.body.style.top="";
+  window.scrollTo(0,scrollLockY);
+}
+function openSheet(sel){ $("#scrim").classList.add("open"); $(sel).classList.add("open"); lockScroll(); }
+function closeSheet(){ $("#scrim").classList.remove("open"); $$(".sheet").forEach(s=>s.classList.remove("open")); unlockScroll(); }
 let toastT;
 function toast(msg){ $("#toastMsg").textContent=msg; const t=$("#toast"); t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2200); }
 
