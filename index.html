@@ -54,7 +54,10 @@
   }
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{background:var(--canvas);color:var(--ink-900);font-family:var(--font-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+html{background:var(--canvas);}
+/* El body debe ser transparente: su ::before (aurora, z-index:-1) se pinta
+   DEBAJO del fondo del body — con fondo opaco, el degradado queda tapado. */
+body{background:transparent;color:var(--ink-900);font-family:var(--font-body);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
 body{padding:0 0 120px;overscroll-behavior-y:contain;position:relative;font-size:16px;line-height:1.5;}
 body.sheet-open{overflow:hidden;position:fixed;left:0;right:0;width:100%;}
 body::before{content:"";position:fixed;inset:0 0 auto;height:360px;z-index:-1;pointer-events:none;
