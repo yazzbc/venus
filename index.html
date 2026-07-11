@@ -16,6 +16,7 @@
    ============================================================ */
 :root{
   --canvas:#FAF6EE; --surface:#FFFFFF; --surface-2:#F3EDE2; --surface-ink:#2A2531;
+  --on-ink:#FDFBF6; --ink-glass:rgba(255,255,255,.14); --ink-glass-strong:rgba(255,255,255,.16);
   --ink-900:#2A2531; --ink-600:#6E6876; --ink-400:#9B94A3;
   --border:#EBE4D6; --border-strong:#DDD4C2;
   --aurora-peach:#FFC08D; --aurora-rose:#F49BC0; --aurora-lilac:#BCA8F4; --aurora-amber:#FFDCA6;
@@ -40,8 +41,9 @@
   --aurora-op:.7;
 }
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not(.theme-light){
     --canvas:#171420; --surface:#221E2C; --surface-2:#2B2637; --surface-ink:#F2EEF7;
+    --on-ink:#221E2C; --ink-glass:rgba(0,0,0,.14); --ink-glass-strong:rgba(0,0,0,.2);
     --ink-900:#F2EEF7; --ink-600:#A9A2B4; --ink-400:#6F6880;
     --border:#332D40; --border-strong:#443C53;
     --aurora-peach:#E0995F; --aurora-rose:#C97BA2; --aurora-lilac:#9280D4; --aurora-amber:#D8B276;
@@ -52,6 +54,20 @@
     --shadow-2:0 2px 4px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.45);
     --aurora-op:.34;
   }
+}
+/* Modo forzado desde ⋯ → Apariencia (mismo set de tokens que el bloque de arriba) */
+:root.theme-dark{
+  --canvas:#171420; --surface:#221E2C; --surface-2:#2B2637; --surface-ink:#F2EEF7;
+  --on-ink:#221E2C; --ink-glass:rgba(0,0,0,.14); --ink-glass-strong:rgba(0,0,0,.2);
+  --ink-900:#F2EEF7; --ink-600:#A9A2B4; --ink-400:#6F6880;
+  --border:#332D40; --border-strong:#443C53;
+  --aurora-peach:#E0995F; --aurora-rose:#C97BA2; --aurora-lilac:#9280D4; --aurora-amber:#D8B276;
+  --accent:#A091F5; --accent-ink:#C7BCFB; --accent-soft:#2C2545;
+  --data-violet:#9280D4; --data-lilac:#9280D4;
+  --ok:#8FC17A; --ok-soft:#232B1D; --warn:#F0C088; --warn-soft:#3A2B14; --danger:#F09B93; --danger-soft:#42201D;
+  --shadow-1:0 1px 2px rgba(0,0,0,.35),0 4px 10px rgba(0,0,0,.30);
+  --shadow-2:0 2px 4px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.45);
+  --aurora-op:.34;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{background:var(--canvas);}
@@ -104,19 +120,18 @@ body.in-session #sessBar{display:block;}
 .wrap{max-width:540px;margin:0 auto;padding:0 20px;}
 .section-hd{display:flex;justify-content:space-between;align-items:baseline;margin:32px 0 12px;}
 .hidden{display:none !important;}
-.ghost-link{font-size:13px;font-weight:600;color:var(--accent-ink);padding:8px 0 8px 16px;}
+.ghost-link{font-size:13px;font-weight:600;color:var(--accent-ink);padding:0 0 0 16px;min-height:44px;display:inline-flex;align-items:center;}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
 /* ---------- Home: fecha + saludo ---------- */
 .hero{padding:20px 0 0;}
 .hero h1{font-family:var(--font-display);font-size:19px;font-weight:600;letter-spacing:-.005em;line-height:1.3;margin-top:4px;color:var(--ink-600);}
 
 /* ---------- Continuar ---------- */
-.continue{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface-ink);color:#FDFBF6;
+.continue{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface-ink);color:var(--on-ink);
   border-radius:var(--r-hero);padding:16px;margin-top:20px;box-shadow:var(--shadow-2);transition:transform .18s var(--spring);}
-@media (prefers-color-scheme: dark){ .continue{color:#221E2C;} }
 .continue:active{transform:scale(.985);}
-.continue .ci{width:38px;height:38px;border-radius:var(--r-el);background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex:none;}
-@media (prefers-color-scheme: dark){ .continue .ci{background:rgba(0,0,0,.12);} }
+.continue .ci{width:38px;height:38px;border-radius:var(--r-el);background:var(--ink-glass);display:flex;align-items:center;justify-content:center;flex:none;}
 .continue .ci svg{width:17px;height:17px;stroke:currentColor;stroke-width:2.2;}
 .continue .ct{flex:1;min-width:0;}
 .continue .ct b{font-size:15px;font-weight:650;display:block;}
@@ -132,11 +147,11 @@ body.in-session #sessBar{display:block;}
 .hoy .sub{font-size:13px;color:var(--ink-600);}
 .hoy .meta{display:flex;gap:20px;margin-top:14px;}
 .hoy .meta span{font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;color:var(--ink-600);text-transform:uppercase;}
-.btn-block{width:100%;height:52px;border-radius:var(--r-btn);background:var(--surface-ink);color:#FDFBF6;font-size:16px;font-weight:600;
+.btn-block{width:100%;height:52px;border-radius:var(--r-btn);background:var(--surface-ink);color:var(--on-ink);font-size:16px;font-weight:600;
   display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;
   box-shadow:0 2px 3px hsl(268deg 12% 15%/.18),0 6px 12px hsl(268deg 12% 15%/.14);
   transition:transform .16s var(--spring);}
-@media (prefers-color-scheme: dark){ .btn-block{color:#221E2C;box-shadow:0 6px 18px rgba(0,0,0,.4);} }
+.btn-block.secondary{background:transparent;color:var(--ink-900);border:1.5px solid var(--border-strong);box-shadow:none;}
 .btn-block:active{transform:scale(.97);}
 .btn-block svg{width:18px;height:18px;stroke:currentColor;stroke-width:2.4;}
 
@@ -157,7 +172,7 @@ body.in-session #sessBar{display:block;}
 .wday{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:14px 6px 12px;text-align:center;position:relative;
   transition:transform .16s var(--spring);}
 .wday:active{transform:scale(.95);}
-.wday .d{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:var(--ink-600);text-transform:uppercase;}
+.wday .d{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--ink-600);text-transform:uppercase;}
 .wday .n{font-size:13px;font-weight:650;margin-top:6px;white-space:nowrap;}
 .wday .st{width:22px;height:22px;border-radius:50%;margin:10px auto 0;display:flex;align-items:center;justify-content:center;background:var(--surface-2);}
 .wday .st i{width:6px;height:6px;border-radius:50%;background:var(--border-strong);display:block;}
@@ -274,7 +289,7 @@ body.in-session #sessBar{display:block;}
 .next-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 14px;border-top:1px solid var(--border);flex-wrap:wrap;}
 .nx-lbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-600);flex:none;}
 .nx-opts{display:flex;gap:6px;}
-.nx{height:38px;padding:0 12px;border-radius:var(--r-el);background:var(--surface-2);font-size:12.5px;font-weight:650;color:var(--ink-600);transition:transform .15s var(--spring),background .2s;}
+.nx{height:44px;padding:0 12px;border-radius:var(--r-el);background:var(--surface-2);font-size:12.5px;font-weight:650;color:var(--ink-600);transition:transform .15s var(--spring),background .2s;}
 .nx:active{transform:scale(.94);}
 .nx.sel{background:var(--accent-soft);color:var(--accent-ink);box-shadow:inset 0 0 0 1.5px var(--accent);}
 .nx-hint{background:var(--accent-soft);color:var(--accent-ink);}
@@ -353,7 +368,7 @@ textarea::placeholder{color:var(--ink-400);}
 
 /* nutrición sheet */
 .chips-grid{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 6px;}
-.qchip{padding:10px 13px;border-radius:var(--r-el);background:var(--accent-soft);color:var(--accent-ink);font-size:13px;font-weight:650;
+.qchip{min-height:44px;display:inline-flex;align-items:center;padding:0 13px;border-radius:var(--r-el);background:var(--accent-soft);color:var(--accent-ink);font-size:13px;font-weight:650;
   transition:transform .16s var(--spring);}
 .qchip:active{transform:scale(.92);}
 .qchip small{opacity:.7;font-weight:600;}
@@ -389,16 +404,14 @@ textarea::placeholder{color:var(--ink-400);}
 .rest-ring{position:relative;width:46px;height:46px;flex:none;}
 .rest-ring svg{transform:rotate(-90deg);}
 .rest-ring circle{fill:none;stroke-width:4;}
-.rest-ring .bg{stroke:rgba(255,255,255,.16);}
-@media (prefers-color-scheme: dark){ .rest-ring .bg{stroke:rgba(0,0,0,.2);} }
+.rest-ring .bg{stroke:var(--ink-glass-strong);}
 .rest-ring .fg{stroke:var(--aurora-lilac);stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
 .rest-time{flex:1;}
 .rest-time .big{font-family:var(--font-display);font-size:24px;font-weight:500;letter-spacing:-.01em;font-variant-numeric:tabular-nums;line-height:1;}
 .rest-time .rlbl{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-top:4px;}
 .rest-btns{display:flex;gap:8px;flex:none;}
-.rest-btn{height:40px;padding:0 14px;border-radius:var(--r-el);background:rgba(255,255,255,.14);color:currentColor;font-size:14px;font-weight:650;
+.rest-btn{height:44px;padding:0 14px;border-radius:var(--r-el);background:var(--ink-glass);color:currentColor;font-size:14px;font-weight:650;
   display:flex;align-items:center;justify-content:center;transition:transform .16s var(--spring);}
-@media (prefers-color-scheme: dark){ .rest-btn{background:rgba(0,0,0,.15);} }
 .rest-btn:active{transform:scale(.9);}
 .rest-btn.skip{background:transparent;opacity:.6;padding:0 8px;}
 @keyframes restdone{0%,100%{transform:scale(1);}30%{transform:scale(1.03);}}
@@ -546,7 +559,7 @@ textarea::placeholder{color:var(--ink-400);}
 
 <!-- ============ MENU SHEET ============ -->
 <div class="scrim" id="scrim"></div>
-<div class="sheet" id="menuSheet">
+<div class="sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Tus datos">
   <div class="grab"></div>
   <h3>Tus datos</h3>
   <p class="sub">Todo se guarda solo en este dispositivo. Exporta para que Venus analice tu progreso.</p>
@@ -566,6 +579,11 @@ textarea::placeholder{color:var(--ink-400);}
     <svg class="opt-chev" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
   </div>
   <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+  <div class="opt" id="optTheme">
+    <div class="opt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></svg></div>
+    <div class="opt-txt"><div class="ot">Apariencia</div><div class="os" id="themeLabel">Automática (sigue al sistema)</div></div>
+    <svg class="opt-chev" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
   <div class="opt danger" id="optReset">
     <div class="opt-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg></div>
     <div class="opt-txt"><div class="ot">Borrar todo</div><div class="os">No se puede deshacer</div></div>
@@ -573,7 +591,7 @@ textarea::placeholder{color:var(--ink-400);}
 </div>
 
 <!-- ============ DETAIL SHEET ============ -->
-<div class="sheet" id="detailSheet">
+<div class="sheet" id="detailSheet" role="dialog" aria-modal="true" aria-label="Detalle del entrenamiento">
   <div class="grab"></div>
   <h3 id="detailTitle"></h3>
   <p class="sub" id="detailSub"></p>
@@ -581,7 +599,7 @@ textarea::placeholder{color:var(--ink-400);}
 </div>
 
 <!-- ============ SWAP SHEET ============ -->
-<div class="sheet" id="swapSheet">
+<div class="sheet" id="swapSheet" role="dialog" aria-modal="true" aria-label="Cambiar sesión">
   <div class="grab"></div>
   <h3>¿Qué sesión haces hoy?</h3>
   <p class="sub">Tu plan es una rotación, no un calendario: se reacomoda solo con lo que elijas.</p>
@@ -589,7 +607,7 @@ textarea::placeholder{color:var(--ink-400);}
 </div>
 
 <!-- ============ NUTRITION SHEET ============ -->
-<div class="sheet" id="nutriSheet">
+<div class="sheet" id="nutriSheet" role="dialog" aria-modal="true" aria-label="Proteína de hoy">
   <div class="grab"></div>
   <h3>Proteína de hoy</h3>
   <p class="sub" id="nutriSub"></p>
@@ -806,15 +824,24 @@ function renderHoy(){
   const r=ROUTINE[k];
   const totalSets=r.exercises.reduce((a,e)=>a+e.sets,0);
   const already=doneThisWeek(k);
+  const draft=loadDraft();
+  const draftR=(draft && ROUTINE[draft.key]) ? ROUTINE[draft.key] : null;
+  // El CTA dice la verdad: continuar si el borrador es de esta sesión,
+  // "ver" (secundario) si hay otra en curso, empezar si no hay nada.
+  let cta;
+  if(draftR && draft.key===k){
+    cta=`<button class="btn-block" id="btnStart"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Continuar ${r.name}</button>`;
+  } else if(draftR){
+    cta=`<button class="btn-block secondary" id="btnStart">Ver ${r.name} · tienes ${draftR.name} en curso</button>`;
+  } else {
+    cta=`<button class="btn-block" id="btnStart"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Empezar ${r.name}</button>`;
+  }
   $("#hoyCard").innerHTML=`
     <div class="hoy-top"><div class="lbl">Sesión de hoy</div><button class="ghost-link" id="btnSwap">Cambiar</button></div>
     <h3>${r.name}</h3>
     <p class="sub">${r.focus}</p>
     <div class="meta"><span>${r.exercises.length} ejercicios</span><span>${totalSets} series</span><span>~${r.mins} min</span></div>
-    <button class="btn-block" id="btnStart">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>
-      Empezar ${r.name}
-    </button>
+    ${cta}
     ${already?`<p class="sub" style="margin-top:10px;text-align:center">✓ Ya hiciste ${r.name} ${relDate(already.ts)} — puedes repetirla o cambiar</p>`:""}`;
   $("#btnStart").onclick=()=>{ haptic(); onCardTap(k); };
   $("#btnSwap").onclick=()=>{ haptic(); openSwapSheet(); };
@@ -844,7 +871,7 @@ function renderWeek(){
     el.onclick=()=>{ haptic(); onCardTap(k); };
     strip.appendChild(el);
   });
-  $("#weekCount").textContent=`${done} de 4 ✓`;
+  $("#weekCount").textContent=done>0?`${done} de 4 ✓`:`0 de 4`;
 }
 
 function renderSummary(){
@@ -1699,11 +1726,31 @@ document.addEventListener("visibilitychange",()=>{
   }
 });
 
-/* ---------- theme-color según el esquema del sistema ---------- */
+/* ---------- Apariencia: automática / clara / oscura ---------- */
+const THEME_STORE="venus_theme";
+const THEME_LABELS={auto:"Automática (sigue al sistema)", dark:"Oscura", light:"Clara"};
+function applyTheme(){
+  const pref=localStorage.getItem(THEME_STORE)||"auto";
+  const root=document.documentElement;
+  root.classList.remove("theme-dark","theme-light");
+  if(pref==="dark") root.classList.add("theme-dark");
+  if(pref==="light") root.classList.add("theme-light");
+  const sysDark=window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const dark = pref==="dark" || (pref==="auto" && sysDark);
+  const m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute("content", dark?"#171420":"#FAF6EE");
+  const lbl=$("#themeLabel"); if(lbl) lbl.textContent=THEME_LABELS[pref];
+}
+$("#optTheme").onclick=()=>{
+  haptic();
+  const cur=localStorage.getItem(THEME_STORE)||"auto";
+  const next=cur==="auto"?"dark":cur==="dark"?"light":"auto";
+  localStorage.setItem(THEME_STORE,next);
+  applyTheme();
+};
 (function(){
   const mq=window.matchMedia("(prefers-color-scheme: dark)");
-  const set=()=>{ const m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute("content", mq.matches?"#171420":"#FAF6EE"); };
-  set(); if(mq.addEventListener) mq.addEventListener("change",set);
+  if(mq.addEventListener) mq.addEventListener("change",applyTheme);
+  applyTheme();
 })();
 
 /* ---------- Init ---------- */
