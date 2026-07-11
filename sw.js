@@ -1,5 +1,5 @@
 /* Venus · Service Worker — funcionamiento offline garantizado */
-const CACHE = "venus-v1";
+const CACHE = "venus-v17";
 const ASSETS = ["./", "./index.html", "./manifest.json"];
 
 self.addEventListener("install", (e) => {
