@@ -1,20 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <defs>
-    <radialGradient id="bg" cx="30%" cy="22%" r="95%">
-      <stop offset="0%" stop-color="#9C8DF2"/>
-      <stop offset="55%" stop-color="#6D56E0"/>
-      <stop offset="100%" stop-color="#4A37B8"/>
-    </radialGradient>
-    <radialGradient id="planet" cx="36%" cy="30%" r="80%">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="#EDE6FF"/>
-    </radialGradient>
+    <radialGradient id="l" cx="50%" cy="-6%" r="63%"><stop offset="0" stop-color="#BCA8F4" stop-opacity=".84"/><stop offset="1" stop-color="#BCA8F4" stop-opacity="0"/></radialGradient>
+    <radialGradient id="a" cx="24%" cy="16%" r="46%"><stop offset="0" stop-color="#FFDCA6" stop-opacity=".8"/><stop offset="1" stop-color="#FFDCA6" stop-opacity="0"/></radialGradient>
+    <radialGradient id="r" cx="79%" cy="13%" r="49%"><stop offset="0" stop-color="#F49BC0" stop-opacity=".8"/><stop offset="1" stop-color="#F49BC0" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <g transform="rotate(-22 256 256)">
-    <ellipse cx="256" cy="256" rx="172" ry="62" fill="none" stroke="#EFEAFF" stroke-opacity="0.5" stroke-width="13"/>
-    <circle cx="428" cy="256" r="15" fill="#EFEAFF"/>
-  </g>
-  <circle cx="256" cy="256" r="92" fill="url(#planet)"/>
-  <circle cx="223" cy="224" r="26" fill="#FFFFFF" opacity="0.45"/>
+  <rect width="1024" height="1024" fill="#FAF6EE"/>
+  <rect width="1024" height="1024" fill="url(#l)"/>
+  <rect width="1024" height="1024" fill="url(#a)"/>
+  <rect width="1024" height="1024" fill="url(#r)"/>
+  <text x="512" y="742" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="640" text-anchor="middle" fill="#2A2531">V</text>
 </svg>
