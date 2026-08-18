@@ -634,20 +634,20 @@ textarea::placeholder{color:var(--ink-400);}
 
 <script>
 /* ============================================================
-   VENUS · App de seguimiento — rutina 4 días (julio 2026)
+   VENUS · App de seguimiento — rutina 4 días v2 (agosto 2026)
    Sistema visual "Aurora" v1 · lógica y datos intactos
    ============================================================ */
 const ROUTINE = {
   A:{
     key:"A", label:"Lower A", day:"Lun", mins:55,
-    name:"Lower A", focus:"Cadera-dominante · glúteo mayor + medio",
+    name:"Lower A", focus:"Cadera-dominante · hip thrust pesado",
     warm:"Calienta: 3-5 min cardio suave + clamshells con banda 1×15/lado + puente de glúteo 1×15.",
     exercises:[
-      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 12-15", sets:3, rest:60, note:"Glúteo medio + superior. Inclínate adelante desde la cadera, espalda neutra. Squeeze 1 s en la apertura máxima."},
-      {n:"Hip thrust (máquina)", t:"4 × 8-12", sets:4, rest:150, note:"Pilar del día. Pelvis neutra arriba, squeeze 1 s. Mientras haya molestia en glúteo izq.: RIR ≥2 y sin subir carga."},
-      {n:"Belt squat", t:"3 × 8-12", sets:3, rest:120, note:"Rango profundo y cómodo. Rodillas siguiendo la punta del pie."},
-      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:"Bajada controlada 2-3 s."},
-      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 12-15", sets:3, rest:90, note:"Aprieta el glúteo arriba, sin hiperextender la lumbar."}
+      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 10-15", sets:3, rest:75, note:"Torso MUY inclinado: pecho hacia las rodillas, bisagra de cadera, espalda neutra. Pies NEUTROS. Pausa 1-2 s en la apertura, bajada 2-3 s. Pesada y progresiva: es un ejercicio principal."},
+      {n:"Hip thrust (máquina)", t:"4 × 6-10", sets:4, rest:150, note:"ANCLA PESADA (Fase 3 🔓). Sube carga al llegar a 10 reps limpias. Pelvis neutra arriba, squeeze 1 s. Si el glúteo izq. avisa (>2-3/10): 8-12 con RIR 2 ese día y anótalo."},
+      {n:"Belt squat", t:"3 × 8-12", sets:3, rest:120, note:"Profunda, stance medio-ancho, puntas ligeramente afuera. Si la rodilla derecha molesta, recorta profundidad ese día y anótalo."},
+      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:"Cadera PEGADA al banco todo el rato, rango completo, bajada 2-3 s."},
+      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 12-15", sets:3, rest:90, note:"Puntas ligeramente afuera, aprieta el glúteo arriba sin hiperextender la lumbar. Progresa con disco al pecho."}
     ]
   },
   U:{
@@ -657,32 +657,30 @@ const ROUTINE = {
     exercises:[
       {n:"Press de pecho (máquina)", t:"3 × 10-12", sets:3, rest:90, note:"Junta ligeramente los omóplatos antes de empujar."},
       {n:"Remo en polea baja", t:"3 × 10-12", sets:3, rest:90, note:"Codos hacia atrás, retrae los omóplatos al final."},
-      {n:"Press de hombro (máquina)", t:"3 × 10-12", sets:3, rest:90, note:"No encojas los trapecios."},
+      {n:"Press de hombro (máquina)", t:"3 × 8-15", sets:3, rest:90, note:"No encojas los trapecios. La placa siguiente es un salto grande: agota el rango hasta 15 reps con bajada de 3 s antes de subir carga."},
       {n:"Jalón en polea alta", t:"3 × 10-12", sets:3, rest:90, note:"Pecho arriba, tira hacia la clavícula."},
-      {n:"Face pull en polea alta (cuerda)", t:"3 × 12-15", sets:3, rest:60, note:"Tira hacia la cara, codos altos, termina rotando hacia fuera. Primera vez: carga ligera, busca RIR 3."}
+      {n:"Face pull en polea alta (cuerda)", t:"3 × 12-15", sets:3, rest:60, note:"Tira hacia la cara, codos altos, termina rotando hacia fuera."}
     ]
   },
   B:{
     key:"B", label:"Lower B", day:"Vie", mins:55,
-    name:"Lower B", focus:"Rodilla-dominante + glúteo · trabajo unilateral",
+    name:"Lower B", focus:"Belt squat pesada + abducción · glute shelf",
     warm:"Calienta: 3-5 min cardio + clamshells con banda 1×15/lado + puente de glúteo 1×15.",
     exercises:[
-      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 12-15", sets:3, rest:60, note:"Igual que en Lower A. Correctivo de valgo."},
-      {n:"Belt squat", t:"4 × 8-12", sets:4, rest:150, note:"Carga algo mayor que el lunes. Rango profundo, valgo controlado."},
-      {n:"Hip thrust unilateral", t:"3 × 10 por lado", sets:3, rest:90, note:"En la máquina de hip thrust, una pierna. Empieza SIEMPRE por el izquierdo. Apunta solo el peso AÑADIDO (la máquina cuenta como base). Si la molestia pasa de 2-3/10, cambia a bilateral ligero y anótalo."},
-      {n:"Leg extension", t:"3 × 12-15", sets:3, rest:90, note:"Rodilla alineada con la punta del pie. Squeeze 1 s arriba. Primera vez: carga para RIR 3."},
-      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:"Bajada controlada 2-3 s."}
+      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 12-15", sets:3, rest:75, note:"Igual que el lunes: torso MUY inclinado, pies neutros, pausa 1-2 s. Zona alta del rango de reps."},
+      {n:"Belt squat", t:"4 × 8-12", sets:4, rest:150, note:"Tu día pesado de belt squat. Rango profundo, valgo controlado."},
+      {n:"Hip thrust con miniband (+ aberturas)", t:"3 × 10-12", sets:3, rest:90, note:"Miniband sobre las rodillas, empujándola afuera TODA la serie. Carga moderada (~60-70% de tu HT pesado). Al acabar cada serie, mantén el puente arriba y haz 8-10 aberturas de rodillas. Tu ejercicio 'shelf'."},
+      {n:"Leg extension", t:"3 × 12-15", sets:3, rest:90, note:"Rodilla alineada con la punta del pie, squeeze 1 s arriba. Si el respaldo se reclina, recuéstalo un poco (más recto femoral)."},
+      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:"Cadera pegada al banco, rango completo, bajada 2-3 s."}
     ]
   },
   H:{
-    key:"H", label:"Casa", day:"Dom", mins:25,
-    name:"Casa", focus:"Pumpers de glúteo + empuje + correctivos · 20-30 min",
-    warm:"Calienta: 2-3 min de movilidad de cadera y hombro + 1 serie suave del primer ejercicio. Aquí la carga es baja: el estímulo está en acercarse al fallo.",
+    key:"H", label:"Casa", day:"Dom", mins:15,
+    name:"Casa mini", focus:"Glúteo medio + empuje + core · 10-15 min · bonus",
+    warm:"Calienta: 1 serie suave del primer ejercicio y listo. Es un día bonus: si una semana no sale, no rompe nada. El estímulo está en acercarse al fallo.",
     exercises:[
-      {n:"Lateral band walk (banda en tobillos)", t:"3 × 12-15 pasos por lado", sets:3, rest:45, note:"Semisentadilla, pasos laterales sin bambolear el torso. La banda en tobillos activa más glúteo medio que en rodillas."},
-      {n:"Puente de glúteo con banda", t:"3 × 15-25", sets:3, rest:45, note:"Rodillas empujando la banda hacia fuera todo el tiempo, squeeze 1 s arriba. Si sobra, añade mancuerna en la cadera."},
-      {n:"Lagartijas (progresión)", t:"3 × deja 1-2 en reserva", sets:3, rest:90, note:"Niveles: manos en mesa → rodillas → completas → pies elevados. Cuerpo en tabla: aprieta glúteo y abdomen. Anota el nivel en Peso si quieres."},
-      {n:"Remo con mancuernas (torso inclinado)", t:"3 × 12-15", sets:3, rest:60, note:"Espalda neutra, retrae omóplatos. Si se queda ligero: bajada de 3 s y acércate al fallo. Con prisa: superserie con las lagartijas."},
+      {n:"Lateral band walk (banda en tobillos)", t:"3 × 15 pasos por lado", sets:3, rest:45, note:"Semisentadilla, pasos cortos, pelvis nivelada, pies neutros. La banda en tobillos activa más glúteo medio que en rodillas."},
+      {n:"Lagartijas (progresión)", t:"3 × deja 1-2 en reserva", sets:3, rest:90, note:"Niveles: manos en mesa → rodillas → completas → pies elevados. Sube de nivel al pasar de ~15 limpias. Cuerpo en tabla: aprieta glúteo y abdomen."},
       {n:"Dead bug", t:"3 × 8-10 por lado", sets:3, rest:45, note:"Lumbar pegada al suelo TODO el tiempo. Tu correctivo antiextensión."}
     ]
   }

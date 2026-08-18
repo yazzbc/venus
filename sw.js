@@ -2,7 +2,7 @@
    Estrategia: la página (index.html) va RED PRIMERO (si hay internet, siempre
    la última versión publicada; si no, la copia cacheada → offline intacto).
    El resto de recursos van caché primero. */
-const CACHE = "venus-v18";
+const CACHE = "venus-v19";
 const ASSETS = ["./", "./index.html", "./manifest.json"];
 
 self.addEventListener("install", (e) => {
