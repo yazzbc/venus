@@ -258,6 +258,25 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .ex-titles{flex:1;min-width:0;}
 .ex-name{font-size:16px;font-weight:650;letter-spacing:-.01em;line-height:1.25;}
 .ex-target{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--ink-600);margin-top:4px;text-transform:uppercase;}
+.guide{margin:0 16px 10px;border:1px solid var(--border);border-radius:var(--r-el);overflow:hidden;background:var(--surface);}
+.guide summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;font-size:13px;font-weight:650;color:var(--accent-ink);}
+.guide summary::-webkit-details-marker{display:none;}
+.guide summary svg{width:16px;height:16px;stroke:var(--accent);stroke-width:2.2;transition:transform .25s var(--ease);}
+.guide[open] summary svg{transform:rotate(180deg);}
+.guide ol{margin:0;padding:2px 14px 12px 30px;font-size:13px;color:var(--ink-600);line-height:1.5;}
+.guide li{margin-bottom:6px;}
+.guide li::marker{color:var(--accent);font-weight:700;}
+.guide .vid{display:inline-flex;align-items:center;gap:6px;margin:0 12px 12px;padding:8px 12px;border-radius:var(--r-el);background:var(--accent-soft);color:var(--accent-ink);font-size:12.5px;font-weight:650;text-decoration:none;}
+.guide .vid svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;}
+.set-swipe{position:relative;overflow:hidden;border-radius:var(--r-el);touch-action:pan-y;margin-bottom:2px;}
+.set-del{position:absolute;top:0;right:0;bottom:0;width:88px;background:var(--danger);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:650;opacity:0;pointer-events:none;transition:opacity .15s;}
+.set-swipe.open .set-del,.set-swipe.dragging .set-del{opacity:1;pointer-events:auto;}
+.set-del svg{width:15px;height:15px;stroke:#fff;stroke-width:2.4;}
+.set-swipe .set-row{position:relative;background:var(--surface);transition:transform .22s var(--ease),background .2s;will-change:transform;}
+.set-swipe .set-row.filled{background:var(--ok-soft);}
+.set-swipe.dragging .set-row{transition:none;}
+.set-swipe.open .set-row{transform:translateX(-88px);}
+.hoy{cursor:pointer;}
 .ex-note{font-size:13px;color:var(--ink-600);background:var(--surface-2);border-radius:var(--r-el);padding:10px 12px;margin:0 16px 8px;line-height:1.5;}
 .lastline{font-size:12px;margin:4px 16px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .lastline b{font-family:var(--font-mono);font-weight:600;color:var(--ink-600);text-transform:uppercase;letter-spacing:.06em;font-size:9.5px;}
@@ -534,22 +553,23 @@ textarea::placeholder{color:var(--ink-400);}
     <div class="focus" id="sessFocus"></div>
     <div id="previewBanner" class="preview-banner hidden">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-      <span>Vista previa · tu entrenamiento en curso sigue guardado</span>
+      <span id="previewMsg">Vista previa</span>
     </div>
+    <button class="btn-block hidden" id="previewStart" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Empezar</button>
   </div>
   <div id="exerciseList"></div>
 
   <div class="notes-block" id="notesBlock">
-    <span class="nb-lbl">¿Cómo sentiste el glúteo izquierdo?</span>
-    <div class="hint">Importante para seguir tu recuperación.</div>
+    <span class="nb-lbl">¿Alguna molestia o dolor hoy?</span>
+    <div class="hint">En cualquier zona: rodilla, muñeca, hombro, glúteo… Si la hay, dime dónde y cuánto (0-10) en las notas.</div>
     <div class="feel-row" id="feelRow">
-      <button class="feel" data-feel="bien"><span class="emo">😀</span>Perfecto</button>
+      <button class="feel" data-feel="bien"><span class="emo">😀</span>Nada</button>
       <button class="feel" data-feel="regular"><span class="emo">😐</span>Algo raro</button>
       <button class="feel" data-feel="mal"><span class="emo">😣</span>Molestia</button>
     </div>
     <span class="nb-lbl">Notas de la sesión</span>
     <div class="hint">Energía, cargas, lo que quieras contarme.</div>
-    <textarea id="sessNotes" placeholder="Hoy me sentí fuerte en el hip thrust…"></textarea>
+    <textarea id="sessNotes" placeholder="Energía, cargas, molestias (dónde y 0-10), segundos colgada…"></textarea>
   </div>
 </div>
 
@@ -644,10 +664,10 @@ const ROUTINE = {
     name:"Full A", focus:"Empuje invertido + glúteo + anti-extensión",
     warm:"Calienta 5-6 min: cardio suave · muñecas (cuadrupedia: balanceos 2×10 + isometría 2×15 s) · wall slide 2×10 · puente de glúteo con miniband 1×15 + clamshells 1×12/lado.",
     exercises:[
-      {n:"Pike push-up (progresión de parada)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Pica cerrada, cadera arriba, la cabeza toca el suelo delante de las manos. Empuja 'alejando el suelo' al final. Niveles: pies en suelo → step → banco → banco con cadera sobre hombros. Sube de nivel con 4×8 @RIR2. Apunta el nivel en Peso (p. ej. 'N2')."},
+      {n:"Pike push-up (progresión de parada)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Pica cerrada, cadera arriba, la cabeza toca el suelo delante de las manos. Empuja 'alejando el suelo' al final. Niveles: pies en suelo → step → banco → banco con cadera sobre hombros. Sube de nivel con 4×8 @RIR2. Apunta el nivel en Peso (p. ej. 'N2').", guide:["Ponte en pica: manos en el suelo a la anchura de los hombros, cadera bien arriba (forma de V invertida). Los pies en el suelo, en un step o en un banco según tu nivel.", "Cuanto más alta la cadera sobre los hombros, más se parece a una parada de manos.", "Dobla los codos y baja la cabeza hacia el suelo, a un punto DELANTE de las manos (no entre ellas).", "Empuja hasta estirar los brazos y, al final, 'aleja el suelo' subiendo los hombros hacia las orejas.", "Mira entre las manos. Codos apuntando hacia atrás, no abiertos a los lados."], video:"pike push up feet elevated tutorial"},
       {n:"Hip thrust (máquina)", t:"4 × 8-12 · RIR 1-2", sets:4, rest:120, note:"Tu ancla de glúteo: NO bajes carga, es lo que mantiene el músculo en déficit. Pelvis neutra arriba, squeeze 1 s."},
       {n:"Remo en polea baja", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Ahora es fuerza: carga alta, sin balanceo. Pausa 1 s con los omóplatos juntos y abajo."},
-      {n:"Rueda abdominal (rodillas)", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Culo metido (retroversión) y glúteo apretado TODA la rep; nada de arquear la lumbar. Sal solo hasta donde controles. Progresión: más lejos → pies contra la pared → de pie. Apunta la distancia o el nivel en Peso."},
+      {n:"Rueda abdominal (rodillas)", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Culo metido (retroversión) y glúteo apretado TODA la rep; nada de arquear la lumbar. Sal solo hasta donde controles. Progresión: más lejos → pies contra la pared → de pie. Apunta la distancia o el nivel en Peso.", guide:["De rodillas, rueda delante de ti, brazos rectos.", "Antes de moverte: culo metido (pelvis en retroversión) y glúteo apretado. Esa forma NO cambia en toda la repetición.", "Rueda hacia delante despacio, solo hasta donde puedas mantener la lumbar sin arquear.", "Vuelve tirando con el abdomen, no con los brazos.", "Progresión: más lejos → con los pies contra la pared → de pie."], video:"ab wheel rollout knees tutorial"},
       {n:"Face pull en polea alta (cuerda)", t:"3 × 10-15 · RIR 2", sets:3, rest:60, note:"Codos altos, termina rotando hacia fuera. Tu correctivo de hombros en rotación interna."}
     ]
   },
@@ -657,9 +677,9 @@ const ROUTINE = {
     warm:"Calienta 5-6 min: cardio suave · muñecas 2×10 + isometría 2×15 s · rotación externa con banda 2×15/lado · wall slide 2×10 · puente con miniband 1×15.",
     exercises:[
       {n:"Press de hombro (máquina)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Con 4-8 reps la siguiente placa ya es viable: prueba hoy. Costillas abajo, sin encoger trapecios. Descansa 2-3 min de verdad."},
-      {n:"Jalón agarre neutro", t:"4 × 6-8 · RIR 2-3", sets:4, rest:150, note:"Agarre neutro o supino. Pecho arriba, codos hacia las costillas, baja en 2 s."},
+      {n:"Jalón agarre neutro", t:"4 × 6-8 · RIR 2-3", sets:4, rest:150, note:"Agarre neutro o supino. Pecho arriba, codos hacia las costillas, baja en 2 s.", guide:["Es el mismo jalón de siempre pero con las palmas enfrentadas (agarre neutro, el triángulo o dos asas) o mirando hacia ti (supino).", "Cambia el ángulo del hombro y da más protagonismo a bíceps y dorsal bajo: por eso es tu 2.ª exposición semanal de tracción, distinta a la del viernes.", "Pecho arriba, tira llevando los codos hacia las costillas, baja en 2 s."], video:"jalon agarre neutro tecnica"},
       {n:"Belt squat", t:"4 × 8-12 · RIR 1-2", sets:4, rest:120, note:"Tu favorita, pesada. Profunda, rodillas siguiendo el pie. Rodilla derecha: si molesta, recorta profundidad y anótalo."},
-      {n:"Elevación de rodillas colgada", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Barra de dominadas. Hombros activos, rodillas al pecho METIENDO la pelvis, baja en 2-3 s. Progresión: rodillas → piernas rectas → tobilleras. Tras la última serie quédate colgada hasta ~5 s antes de soltar y apunta los segundos en Notas."},
+      {n:"Elevación de rodillas colgada", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Barra de dominadas. Hombros activos, rodillas al pecho METIENDO la pelvis, baja en 2-3 s. Progresión: rodillas → piernas rectas → tobilleras. Tras la última serie quédate colgada hasta ~5 s antes de soltar y apunta los segundos en Notas.", guide:["Cuélgate de la barra con las manos a la anchura de los hombros. Hombros 'activos': no cuelgues muerta, empuja la barra hacia abajo un poco.", "Lleva las rodillas hacia el pecho METIENDO la pelvis (el culo se enrolla hacia delante). Si solo suben las rodillas sin enrollar la pelvis, es flexor de cadera, no abdomen.", "Baja en 2-3 s sin balancearte.", "Progresión: rodillas dobladas → piernas rectas (pica) → con tobilleras.", "Tras la última serie quédate colgada hasta ~5 s antes de perder el agarre. Apunta los segundos en Notas."], video:"hanging knee raise tutorial"},
       {n:"Press de pecho (máquina)", t:"3 × 6-10 · RIR 2", sets:3, rest:90, note:"Secundario. Omóplatos juntos antes de empujar."}
     ]
   },
@@ -668,11 +688,11 @@ const ROUTINE = {
     name:"Full C", focus:"Tracción pesada + parada en pared + glúteo/isquio",
     warm:"Calienta 5-6 min: cardio suave · muñecas 2×10 + isometría 2×15 s · wall slide 2×10 · colgada suave 2×10 s · puente con miniband 1×15.",
     exercises:[
-      {n:"Jalón en polea alta", t:"4 × 4-6 · RIR 2-3 · PESADO", sets:4, rest:180, note:"Tu tracción principal. Agarre prono algo más ancho que los hombros, tira a la clavícula, 3 min de descanso. Hito: ~45 kg × 5 → empezamos dominadas con banda."},
-      {n:"Parada de manos en pared (progresión)", t:"3 × 15-30 s", sets:3, rest:120, note:"Apunta los SEGUNDOS en Reps y el nivel en Peso. Niveles: N1 pica con pies en banco · N2 apoyo de codos con pies en banco · N3 espalda a la pared (walk-up) · N4 pecho a la pared. Sube con 3×30 s limpios. Empuja el suelo, costillas cerradas, culo metido."},
+      {n:"Jalón en polea alta", t:"4 × 4-6 · RIR 2-3 · PESADO", sets:4, rest:180, note:"Tu tracción principal. Agarre prono algo más ancho que los hombros, tira a la clavícula, 3 min de descanso. Hito: ~45 kg × 5 → empezamos dominadas con banda.", guide:["Tu tracción principal, hoy PESADA: 4-6 reps con 2-3 en reserva y 3 min de descanso.", "Agarre prono (palmas hacia delante) algo más ancho que los hombros.", "Pecho arriba, tira hacia la clavícula, codos hacia abajo y atrás, baja en 2 s.", "Hito: cuando muevas ~45 kg × 5, empezamos dominadas con banda."], video:"lat pulldown technique"},
+      {n:"Parada de manos en pared (progresión)", t:"3 × 15-30 s", sets:3, rest:120, note:"Apunta los SEGUNDOS en Reps y el nivel en Peso. Niveles: N1 pica con pies en banco · N2 apoyo de codos con pies en banco · N3 espalda a la pared (walk-up) · N4 pecho a la pared. Sube con 3×30 s limpios. Empuja el suelo, costillas cerradas, culo metido.", guide:["Son 4 niveles; empieza en el que consigas 15 s limpios y sube cuando hagas 3×30 s.", "N1 · Pica con pies en banco: manos en el suelo, pies sobre un banco, cadera encima de los hombros, brazos estirados. Aguanta empujando el suelo.", "N2 · Apoyo de codos: igual, pero con los antebrazos en el suelo (prepara la parada de cabeza sin cargar el cuello).", "N3 · Espalda a la pared: manos a ~30 cm de la pared, sube los pies caminando por la pared hasta quedar casi vertical con la espalda hacia la pared.", "N4 · Pecho a la pared: colócate de espaldas a la pared en plancha y camina con los pies hacia arriba por la pared mientras acercas las manos, hasta quedar con el pecho mirando a la pared.", "En todos: empuja el suelo, costillas cerradas, culo metido, mira entre las manos. Apunta los segundos en Reps y el nivel en Peso (N1…N4)."], video:"handstand wall progression beginners"},
       {n:"Hiperextensión (énfasis glúteo)", t:"3 × 10-15 · RIR 1-2", sets:3, rest:90, note:"Con disco al pecho. Glúteo + isquios en una casilla. Puntas ligeramente afuera, squeeze arriba sin hiperextender la lumbar. Si echas de menos el curl femoral, cámbialo aquí en semanas alternas."},
-      {n:"Remo invertido en Multipower", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Barra del Smith a la altura de la cadera, cuerpo en tabla, pecho a la barra, pausa 1 s. Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso."},
-      {n:"Crunch en polea alta (cuerda)", t:"3 × 8-12 · RIR 2", sets:3, rest:75, note:"De rodillas, cadera fija, enrolla el tronco llevando los codos a los muslos. Carga progresiva como cualquier ejercicio de fuerza."}
+      {n:"Remo invertido en Multipower", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Barra del Smith a la altura de la cadera, cuerpo en tabla, pecho a la barra, pausa 1 s. Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso.", guide:["Coloca la barra del Smith a la altura de la cadera. Cuélgate debajo con los brazos rectos, talones en el suelo, cuerpo en tabla (glúteo y abdomen apretados).", "Tira del pecho hacia la barra juntando los omóplatos; pausa 1 s arriba; baja en 2 s.", "Cuanto más baja está la barra (o más elevados los pies), más difícil.", "Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso."], video:"remo invertido multipower tecnica"},
+      {n:"Crunch en polea alta (cuerda)", t:"3 × 8-12 · RIR 2", sets:3, rest:75, note:"De rodillas, cadera fija, enrolla el tronco llevando los codos a los muslos. Carga progresiva como cualquier ejercicio de fuerza.", guide:["De rodillas frente a la polea alta con la cuerda sujeta junto a la cabeza.", "Cadera quieta: enrolla el tronco llevando los codos hacia los muslos (flexionas la columna, no la cadera).", "Vuelve controlando en 2 s. Progresa en carga como cualquier ejercicio de fuerza."], video:"cable crunch kneeling technique"}
     ]
   },
   HC:{
@@ -680,10 +700,10 @@ const ROUTINE = {
     name:"Casa · core y habilidades", focus:"Hollow + pared + compresión + trapecio inferior · 20 min · 1-2×/semana",
     warm:"1 min de muñecas y 1 serie suave de hollow. Es la parte más específica de la semana: cada vez que tocas la posición, el sistema nervioso la aprende un poco más. Si sale 1 día, vale; si salen 2, mejor.",
     exercises:[
-      {n:"Hollow body hold", t:"3 × 20-40 s", sets:3, rest:60, note:"Lumbar PEGADA al suelo, brazos junto a las orejas. Progresión: rodillas dobladas → piernas rectas altas → piernas bajas. Apunta los segundos en Reps."},
-      {n:"Pared: pica en silla o espalda a la pared", t:"3 × 15-30 s", sets:3, rest:90, note:"Mismo nivel que el viernes en el gym (o uno menos). Apunta los segundos en Reps."},
-      {n:"Compresión sentada", t:"3 × 8-10", sets:3, rest:60, note:"Sentada, piernas rectas juntas, manos en el suelo junto a las caderas (o delante de las rodillas al principio). Eleva las piernas rectas y aguanta 1-2 s. Es el gesto de subir las piernas al pino."},
-      {n:"Y prona con mancuernas ligeras", t:"3 × 10-12", sets:3, rest:45, note:"Boca abajo, brazos en Y con pulgares arriba, eleva desde el trapecio inferior sin encoger el cuello. Es rehabilitación de hombro, no de peso: 1-2 kg sobran."}
+      {n:"Hollow body hold", t:"3 × 20-40 s", sets:3, rest:60, note:"Lumbar PEGADA al suelo, brazos junto a las orejas. Progresión: rodillas dobladas → piernas rectas altas → piernas bajas. Apunta los segundos en Reps.", guide:["Túmbate boca arriba. Pega la lumbar al suelo metiendo el culo: eso es lo que manda.", "Despega hombros y piernas del suelo, brazos junto a las orejas. El cuerpo forma una 'banana' suave.", "Si la lumbar se despega, dobla las rodillas o sube más las piernas: es la versión fácil.", "Progresión: rodillas dobladas → piernas rectas altas → piernas más bajas. Apunta los segundos en Reps."], video:"hollow body hold tutorial"},
+      {n:"Pared: pica en silla o espalda a la pared", t:"3 × 15-30 s", sets:3, rest:90, note:"Mismo nivel que el viernes en el gym (o uno menos). Apunta los segundos en Reps.", guide:["Es la misma progresión de parada del viernes, en casa.", "Pica en silla: manos en el suelo, pies sobre una silla firme, cadera encima de los hombros, brazos estirados. Aguanta 15-30 s.", "Espalda a la pared: manos a ~30 cm de la pared y sube los pies caminando por la pared hasta quedar casi vertical.", "Haz el mismo nivel que el viernes (o uno menos). Un minuto de muñecas antes."], video:"handstand wall walk beginners"},
+      {n:"Compresión sentada", t:"3 × 8-10", sets:3, rest:60, note:"Sentada, piernas rectas juntas, manos en el suelo junto a las caderas (o delante de las rodillas al principio). Eleva las piernas rectas y aguanta 1-2 s. Es el gesto de subir las piernas al pino.", guide:["Siéntate en el suelo con las piernas rectas y juntas, espalda recta.", "Manos en el suelo junto a las caderas (más fácil: delante de las rodillas, sobre los muslos).", "Empuja el suelo con las manos y eleva las piernas rectas unos centímetros. Aguanta 1-2 s y baja.", "Es exactamente el gesto de subir las piernas al pino: flexores de cadera + abdomen + empuje de hombros."], video:"seated pike compression exercise"},
+      {n:"Y prona con mancuernas ligeras", t:"3 × 10-12", sets:3, rest:45, note:"Boca abajo, brazos en Y con pulgares arriba, eleva desde el trapecio inferior sin encoger el cuello. Es rehabilitación de hombro, no de peso: 1-2 kg sobran.", guide:["Túmbate boca abajo (en el suelo o en un banco), frente apoyada, brazos estirados hacia delante formando una Y, pulgares hacia arriba.", "Eleva los brazos rectos desde la parte baja de los omóplatos (trapecio inferior). El cuello no se encoge y los brazos no se doblan.", "Baja en 2 s. Con 1-2 kg o sin peso sobra: es un ejercicio de control, no de carga."], video:"prone Y raise lower trapezius"}
     ]
   },
   /* ======== v2 · agosto 2026 (solo para leer historial e importar) ======== */
@@ -872,8 +892,9 @@ function renderHoy(){
     <div class="meta"><span>${r.exercises.length} ejercicios</span><span>${totalSets} series</span><span>~${r.mins} min</span></div>
     ${cta}
     ${already?`<p class="sub" style="margin-top:10px;text-align:center">✓ Ya hiciste ${r.name} ${relDate(already.ts)} — puedes repetirla o cambiar</p>`:""}`;
-  $("#btnStart").onclick=()=>{ haptic(); onCardTap(k); };
-  $("#btnSwap").onclick=()=>{ haptic(); openSwapSheet(); };
+  $("#btnStart").onclick=(e)=>{ e.stopPropagation(); haptic(); onCardTap(k); };
+  $("#btnSwap").onclick=(e)=>{ e.stopPropagation(); haptic(); openSwapSheet(); };
+  $("#hoyCard").onclick=()=>{ haptic(); openSession(k,{preview:true}); };
 }
 
 function renderNutriCard(){
@@ -1216,6 +1237,21 @@ function buildSessionUI(key, opts={}){
   $("#sessFocus").textContent=r.focus;
   $("#brandSub").textContent = preview ? "Vista previa" : r.name+" en curso";
   $("#previewBanner").classList.toggle("hidden", !preview);
+  if(preview){
+    const d=loadDraft(); const ps=$("#previewStart");
+    if(d && ROUTINE[d.key] && d.key!==key){
+      $("#previewMsg").textContent=`Vista previa · tienes ${ROUTINE[d.key].name} en curso`;
+      ps.classList.add("hidden");
+    } else if(d && d.key===key){
+      $("#previewMsg").textContent="Vista previa · esta sesión está en curso";
+      ps.classList.remove("hidden"); ps.innerHTML=`<svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Continuar ${r.name}`;
+      ps.onclick=()=>{ haptic(); resumeDraft(); };
+    } else {
+      $("#previewMsg").textContent="Vista previa · toca Empezar cuando estés en el gym";
+      ps.classList.remove("hidden"); ps.innerHTML=`<svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Empezar ${r.name}`;
+      ps.onclick=()=>{ haptic(); preview=false; openSession(key); };
+    }
+  } else { $("#previewStart").classList.add("hidden"); }
   $("#notesBlock").classList.toggle("hidden", preview);
   $("#saveBar").classList.toggle("hidden", preview);
   document.body.classList.toggle("in-session", editing);
@@ -1255,19 +1291,19 @@ function buildSessionUI(key, opts={}){
         const ls = (!isW && last && last[wn-1]) ? last[wn-1] : null;
         const phW = ls && ls.w ? ls.w : "kg";
         const phR = ls && ls.r ? ls.r : "reps";
-        rows+=`<div class="set-row ${s&&s.done?'filled':''}" data-si="${si}">
+        rows+=`<div class="set-swipe" data-ei="${ei}" data-si="${si}">${editing?`<button class="set-del" data-ei="${ei}" data-si="${si}" aria-label="Borrar serie"><svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>Borrar</button>`:''}<div class="set-row ${s&&s.done?'filled':''}" data-si="${si}">
           <div class="set-no${isW?' warm':''}">${isW?"C":wn}</div>
           <div class="cell"><input class="${ls&&ls.w?'ghost':''}" type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" value="${v('w')}" placeholder="${phW}" data-f="w" data-ei="${ei}" data-si="${si}" ${dis}></div>
           <div class="cell"><input class="${ls&&ls.r?'ghost':''}" type="number" inputmode="numeric" value="${v('r')}" placeholder="${phR}" data-f="r" data-ei="${ei}" data-si="${si}" ${dis}></div>
           <div class="cell"><input type="number" inputmode="numeric" value="${v('rir')}" placeholder="RIR" data-f="rir" data-ei="${ei}" data-si="${si}" ${dis}></div>
           ${preview?'<div class="tick" style="opacity:.25"></div>':'<button class="tick" data-ei="'+ei+'" data-si="'+si+'" aria-label="Completar serie"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5"/></svg></button>'}
-        </div>`;
+        </div></div>`;
       }
       const hasWarm = editing && current.exercises[ei].sets.some(x=>x.warm);
       const actions = editing ? `<div class="set-actions">
           ${(ei<3 && !hasWarm)?`<button class="set-act wu" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 002.5 2.5z"/></svg>Calentamiento</button>`:''}
           <button class="set-act add" data-ei="${ei}"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14"/></svg>Añadir serie</button>
-          ${setCount>1?`<button class="set-act rm" data-ei="${ei}" aria-label="Quitar última serie"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14"/></svg></button>`:''}
+          ${setCount>1?`<button class="set-act rm" data-ei="${ei}" aria-label="Quitar última serie (o desliza una serie hacia la izquierda para borrarla)"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14"/></svg></button>`:''}
         </div>` : "";
       const nxt = editing ? (current.exercises[ei].next||null) : null;
       const nextRow = editing ? `<div class="next-row"><span class="nx-lbl">Próxima sesión</span><div class="nx-opts">
@@ -1285,6 +1321,7 @@ function buildSessionUI(key, opts={}){
       ${last?`<div class="lastline"><b>Última vez</b>${last.map(s=>`<span class="ls-set">${s.w||"–"}×${s.r||"–"}</span>`).join("")}</div>`:''}
       ${hintV?`<div class="ex-note nx-hint">📌 La última vez dijiste: <b>${NEXT_TXT[hintV]}</b></div>`:''}
       ${ex.note?`<div class="ex-note">${ex.note}</div>`:''}
+      ${ex.guide?`<details class="guide"><summary>Cómo se hace<svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></summary><ol>${ex.guide.map(t=>`<li>${t}</li>`).join("")}</ol>${ex.video?`<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.video)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Ver vídeo (con conexión)</a>`:''}</details>`:''}
       ${body}`;
     el.appendChild(card);
     if(editing && current.exercises[ei].sets.every(x=>x.done)) card.classList.add("done-ex");
@@ -1307,6 +1344,8 @@ function buildSessionUI(key, opts={}){
     $$("#exerciseList .timed-btn").forEach(b=>{ b.addEventListener("click",()=>startPlank(+b.dataset.ei,+b.dataset.si,b)); });
     $$("#exerciseList .set-act.add").forEach(b=>{ b.addEventListener("click",()=>addSet(+b.dataset.ei)); });
     $$("#exerciseList .set-act.rm").forEach(b=>{ b.addEventListener("click",()=>removeSet(+b.dataset.ei)); });
+    $$("#exerciseList .set-del").forEach(b=>{ b.addEventListener("click",()=>removeSetAt(+b.dataset.ei,+b.dataset.si)); });
+    $$("#exerciseList .set-swipe").forEach(bindSwipe);
     $$("#exerciseList .set-act.wu").forEach(b=>{ b.addEventListener("click",()=>addWarmSet(+b.dataset.ei)); });
     $$("#exerciseList .nx").forEach(b=>{ b.addEventListener("click",()=>setNext(+b.dataset.ei,b.dataset.v)); });
     refreshSaveBtn();
@@ -1451,6 +1490,45 @@ function addSet(ei){
   const card=$(`#exerciseList .ex[data-ei="${ei}"]`);
   if(card){ const rows=$$(".set-row",card); const inp=rows.length?rows[rows.length-1].querySelector('input[data-f="w"]'):null; if(inp) inp.focus(); }
 }
+/* Desliza una serie hacia la izquierda → aparece "Borrar" */
+function bindSwipe(el){
+  let x0=0,y0=0,dx=0,drag=false,axis=null;
+  const row=el.querySelector(".set-row"); if(!row) return;
+  el.addEventListener("touchstart",e=>{
+    const t=e.touches[0]; x0=t.clientX; y0=t.clientY; dx=0; axis=null; drag=false;
+    $$("#exerciseList .set-swipe.open").forEach(o=>{ if(o!==el) o.classList.remove("open"); });
+  },{passive:true});
+  el.addEventListener("touchmove",e=>{
+    const t=e.touches[0]; const mx=t.clientX-x0, my=t.clientY-y0;
+    if(!axis){ if(Math.abs(mx)<6 && Math.abs(my)<6) return; axis=Math.abs(mx)>Math.abs(my)?"x":"y"; }
+    if(axis!=="x") return;
+    drag=true; el.classList.add("dragging");
+    const base=el.classList.contains("open")?-88:0;
+    dx=Math.max(-100, Math.min(20, base+mx));
+    row.style.transform=`translateX(${dx}px)`;
+  },{passive:true});
+  const end=()=>{
+    el.classList.remove("dragging");
+    if(!drag){ return; }
+    row.style.transform="";
+    if(dx<-44){ el.classList.add("open"); haptic(); } else { el.classList.remove("open"); }
+    drag=false;
+  };
+  el.addEventListener("touchend",end); el.addEventListener("touchcancel",end);
+}
+function removeSetAt(ei,si){
+  if(!current) return;
+  const sets=current.exercises[ei].sets;
+  if(sets.length<=1){ toast("Deja al menos una serie"); return; }
+  const s=sets[si]; if(!s) return;
+  if((s.done||s.w||s.r||s.rir) && !confirm("Esta serie tiene datos. ¿Borrarla igualmente?")) return;
+  haptic();
+  sets.splice(si,1);
+  saveDraft();
+  buildSessionUI(current.key,{keepScroll:true});
+  updateProgress();
+  toast("Serie borrada");
+}
 function removeSet(ei){
   if(!current) return;
   const sets=current.exercises[ei].sets;
@@ -1521,7 +1599,7 @@ function saveSession(){
 function showDetail(w){
   const r=ROUTINE[w.key]; const d=new Date(w.ts);
   $("#detailTitle").textContent=r?r.name:w.key;
-  const feelTxt = w.feel==="bien"?" · Glúteo perfecto 😀":w.feel==="regular"?" · Glúteo algo raro 😐":w.feel==="mal"?" · Molestia en glúteo 😣":"";
+  const feelTxt = w.feel==="bien"?" · Sin molestias 😀":w.feel==="regular"?" · Algo raro 😐":w.feel==="mal"?" · Molestia 😣":"";
   const durTxt = w.duration ? ` · ⏱ ${fmtClock(w.duration)}` : "";
   $("#detailSub").textContent=`${d.getDate()} ${MONTHS[d.getMonth()].toLowerCase()} ${d.getFullYear()} · ${d.getHours().toString().padStart(2,"0")}:${d.getMinutes().toString().padStart(2,"0")}${durTxt}${feelTxt}`;
   const body=$("#detailBody"); body.innerHTML="";
@@ -1562,7 +1640,7 @@ function buildSummary(){
   workouts.forEach(w=>{
     const r=ROUTINE[w.key]; const d=new Date(w.ts);
     out+=`\n━━━━━━━━━━━━━━━━━━━━\n${d.toLocaleDateString("es-ES")} · ${r?r.name:w.key}`;
-    if(w.feel) out+=` · glúteo: ${w.feel}`;
+    if(w.feel) out+=` · molestias: ${w.feel==="bien"?"ninguna":w.feel==="regular"?"algo raro":"molestia"}`;
     out+=`\n`;
     w.exercises.forEach(ex=>{
       const filled=ex.sets.filter(s=>s.done||s.w||s.r);
