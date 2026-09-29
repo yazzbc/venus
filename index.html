@@ -268,7 +268,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .guide li::marker{color:var(--accent);font-weight:700;}
 .guide .vid{display:inline-flex;align-items:center;gap:6px;margin:0 12px 12px;padding:8px 12px;border-radius:var(--r-el);background:var(--accent-soft);color:var(--accent-ink);font-size:12.5px;font-weight:650;text-decoration:none;}
 .guide .vid svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;}
-.set-swipe{position:relative;overflow:hidden;border-radius:var(--r-el);touch-action:pan-y;margin-bottom:2px;}
+.gifwrap{margin:2px 12px 8px;border-radius:var(--r-el);overflow:hidden;background:var(--surface-2);}
+.gifwrap .gif{display:block;width:100%;max-width:220px;margin:0 auto;aspect-ratio:1/1;object-fit:cover;background:var(--surface-2);}
+.gifwrap .gifnote{display:block;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-400);text-align:center;padding:6px 8px;}
+.set-swipe{position:relative;overflow:hidden;border-radius:var(--r-el);touch-action:pan-y;margin-bottom:2px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.set-swipe .set-no{cursor:pointer;width:32px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;}
+.set-swipe.open .set-no{background:var(--danger-soft);color:var(--danger);}
 .set-del{position:absolute;top:0;right:0;bottom:0;width:88px;background:var(--danger);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:650;opacity:0;pointer-events:none;transition:opacity .15s;}
 .set-swipe.open .set-del,.set-swipe.dragging .set-del{opacity:1;pointer-events:auto;}
 .set-del svg{width:15px;height:15px;stroke:#fff;stroke-width:2.4;}
@@ -666,9 +671,9 @@ const ROUTINE = {
     exercises:[
       {n:"Pike push-up (progresión de parada)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Pica cerrada, cadera arriba, la cabeza toca el suelo delante de las manos. Empuja 'alejando el suelo' al final. Niveles: pies en suelo → step → banco → banco con cadera sobre hombros. Sube de nivel con 4×8 @RIR2. Apunta el nivel en Peso (p. ej. 'N2').", guide:["Ponte en pica: manos en el suelo a la anchura de los hombros, cadera bien arriba (forma de V invertida). Los pies en el suelo, en un step o en un banco según tu nivel.", "Cuanto más alta la cadera sobre los hombros, más se parece a una parada de manos.", "Dobla los codos y baja la cabeza hacia el suelo, a un punto DELANTE de las manos (no entre ellas).", "Empuja hasta estirar los brazos y, al final, 'aleja el suelo' subiendo los hombros hacia las orejas.", "Mira entre las manos. Codos apuntando hacia atrás, no abiertos a los lados."], video:"pike push up feet elevated tutorial"},
       {n:"Hip thrust (máquina)", t:"4 × 8-12 · RIR 1-2", sets:4, rest:120, note:"Tu ancla de glúteo: NO bajes carga, es lo que mantiene el músculo en déficit. Pelvis neutra arriba, squeeze 1 s."},
-      {n:"Remo en polea baja", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Ahora es fuerza: carga alta, sin balanceo. Pausa 1 s con los omóplatos juntos y abajo."},
-      {n:"Rueda abdominal (rodillas)", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Culo metido (retroversión) y glúteo apretado TODA la rep; nada de arquear la lumbar. Sal solo hasta donde controles. Progresión: más lejos → pies contra la pared → de pie. Apunta la distancia o el nivel en Peso.", guide:["De rodillas, rueda delante de ti, brazos rectos.", "Antes de moverte: culo metido (pelvis en retroversión) y glúteo apretado. Esa forma NO cambia en toda la repetición.", "Rueda hacia delante despacio, solo hasta donde puedas mantener la lumbar sin arquear.", "Vuelve tirando con el abdomen, no con los brazos.", "Progresión: más lejos → con los pies contra la pared → de pie."], video:"ab wheel rollout knees tutorial"},
-      {n:"Face pull en polea alta (cuerda)", t:"3 × 10-15 · RIR 2", sets:3, rest:60, note:"Codos altos, termina rotando hacia fuera. Tu correctivo de hombros en rotación interna."}
+      {n:"Remo en polea baja", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Ahora es fuerza: carga alta, sin balanceo. Pausa 1 s con los omóplatos juntos y abajo.", gif:"0180-hvV79Si.gif"},
+      {n:"Rueda abdominal (rodillas)", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Culo metido (retroversión) y glúteo apretado TODA la rep; nada de arquear la lumbar. Sal solo hasta donde controles. Progresión: más lejos → pies contra la pared → de pie. Apunta la distancia o el nivel en Peso.", guide:["De rodillas, rueda delante de ti, brazos rectos.", "Antes de moverte: culo metido (pelvis en retroversión) y glúteo apretado. Esa forma NO cambia en toda la repetición.", "Rueda hacia delante despacio, solo hasta donde puedas mantener la lumbar sin arquear.", "Vuelve tirando con el abdomen, no con los brazos.", "Progresión: más lejos → con los pies contra la pared → de pie."], video:"ab wheel rollout knees tutorial", gif:"0857-NAgVB3t.gif"},
+      {n:"Face pull en polea alta (cuerda)", t:"3 × 10-15 · RIR 2", sets:3, rest:60, note:"Codos altos, termina rotando hacia fuera. Tu correctivo de hombros en rotación interna.", gif:"0233-ZfyAGhK.gif"}
     ]
   },
   FB:{
@@ -676,11 +681,11 @@ const ROUTINE = {
     name:"Full B", focus:"Press vertical + tracción + belt squat + compresión colgada",
     warm:"Calienta 5-6 min: cardio suave · muñecas 2×10 + isometría 2×15 s · rotación externa con banda 2×15/lado · wall slide 2×10 · puente con miniband 1×15.",
     exercises:[
-      {n:"Press de hombro (máquina)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Con 4-8 reps la siguiente placa ya es viable: prueba hoy. Costillas abajo, sin encoger trapecios. Descansa 2-3 min de verdad."},
-      {n:"Jalón agarre neutro", t:"4 × 6-8 · RIR 2-3", sets:4, rest:150, note:"Agarre neutro o supino. Pecho arriba, codos hacia las costillas, baja en 2 s.", guide:["Es el mismo jalón de siempre pero con las palmas enfrentadas (agarre neutro, el triángulo o dos asas) o mirando hacia ti (supino).", "Cambia el ángulo del hombro y da más protagonismo a bíceps y dorsal bajo: por eso es tu 2.ª exposición semanal de tracción, distinta a la del viernes.", "Pecho arriba, tira llevando los codos hacia las costillas, baja en 2 s."], video:"jalon agarre neutro tecnica"},
+      {n:"Press de hombro (máquina)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Con 4-8 reps la siguiente placa ya es viable: prueba hoy. Costillas abajo, sin encoger trapecios. Descansa 2-3 min de verdad.", gif:"0603-67n3r98.gif"},
+      {n:"Jalón agarre neutro", t:"4 × 6-8 · RIR 2-3", sets:4, rest:150, note:"Agarre neutro o supino. Pecho arriba, codos hacia las costillas, baja en 2 s.", guide:["Es el mismo jalón de siempre pero con las palmas enfrentadas (agarre neutro, el triángulo o dos asas) o mirando hacia ti (supino).", "Cambia el ángulo del hombro y da más protagonismo a bíceps y dorsal bajo: por eso es tu 2.ª exposición semanal de tracción, distinta a la del viernes.", "Pecho arriba, tira llevando los codos hacia las costillas, baja en 2 s."], video:"jalon agarre neutro tecnica", gif:"2616-4c9BhzB.gif"},
       {n:"Belt squat", t:"4 × 8-12 · RIR 1-2", sets:4, rest:120, note:"Tu favorita, pesada. Profunda, rodillas siguiendo el pie. Rodilla derecha: si molesta, recorta profundidad y anótalo."},
-      {n:"Elevación de rodillas colgada", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Barra de dominadas. Hombros activos, rodillas al pecho METIENDO la pelvis, baja en 2-3 s. Progresión: rodillas → piernas rectas → tobilleras. Tras la última serie quédate colgada hasta ~5 s antes de soltar y apunta los segundos en Notas.", guide:["Cuélgate de la barra con las manos a la anchura de los hombros. Hombros 'activos': no cuelgues muerta, empuja la barra hacia abajo un poco.", "Lleva las rodillas hacia el pecho METIENDO la pelvis (el culo se enrolla hacia delante). Si solo suben las rodillas sin enrollar la pelvis, es flexor de cadera, no abdomen.", "Baja en 2-3 s sin balancearte.", "Progresión: rodillas dobladas → piernas rectas (pica) → con tobilleras.", "Tras la última serie quédate colgada hasta ~5 s antes de perder el agarre. Apunta los segundos en Notas."], video:"hanging knee raise tutorial"},
-      {n:"Press de pecho (máquina)", t:"3 × 6-10 · RIR 2", sets:3, rest:90, note:"Secundario. Omóplatos juntos antes de empujar."}
+      {n:"Elevación de rodillas colgada", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Barra de dominadas. Hombros activos, rodillas al pecho METIENDO la pelvis, baja en 2-3 s. Progresión: rodillas → piernas rectas → tobilleras. Tras la última serie quédate colgada hasta ~5 s antes de soltar y apunta los segundos en Notas.", guide:["Cuélgate de la barra con las manos a la anchura de los hombros. Hombros 'activos': no cuelgues muerta, empuja la barra hacia abajo un poco.", "Lleva las rodillas hacia el pecho METIENDO la pelvis (el culo se enrolla hacia delante). Si solo suben las rodillas sin enrollar la pelvis, es flexor de cadera, no abdomen.", "Baja en 2-3 s sin balancearte.", "Progresión: rodillas dobladas → piernas rectas (pica) → con tobilleras.", "Tras la última serie quédate colgada hasta ~5 s antes de perder el agarre. Apunta los segundos en Notas."], video:"hanging knee raise tutorial", gif:"0472-I3tsCnC.gif"},
+      {n:"Press de pecho (máquina)", t:"3 × 6-10 · RIR 2", sets:3, rest:90, note:"Secundario. Omóplatos juntos antes de empujar.", gif:"0577-T0yTjgW.gif"}
     ]
   },
   FC:{
@@ -688,11 +693,11 @@ const ROUTINE = {
     name:"Full C", focus:"Tracción pesada + parada en pared + glúteo/isquio",
     warm:"Calienta 5-6 min: cardio suave · muñecas 2×10 + isometría 2×15 s · wall slide 2×10 · colgada suave 2×10 s · puente con miniband 1×15.",
     exercises:[
-      {n:"Jalón en polea alta", t:"4 × 4-6 · RIR 2-3 · PESADO", sets:4, rest:180, note:"Tu tracción principal. Agarre prono algo más ancho que los hombros, tira a la clavícula, 3 min de descanso. Hito: ~45 kg × 5 → empezamos dominadas con banda.", guide:["Tu tracción principal, hoy PESADA: 4-6 reps con 2-3 en reserva y 3 min de descanso.", "Agarre prono (palmas hacia delante) algo más ancho que los hombros.", "Pecho arriba, tira hacia la clavícula, codos hacia abajo y atrás, baja en 2 s.", "Hito: cuando muevas ~45 kg × 5, empezamos dominadas con banda."], video:"lat pulldown technique"},
-      {n:"Parada de manos en pared (progresión)", t:"3 × 15-30 s", sets:3, rest:120, note:"Apunta los SEGUNDOS en Reps y el nivel en Peso. Niveles: N1 pica con pies en banco · N2 apoyo de codos con pies en banco · N3 espalda a la pared (walk-up) · N4 pecho a la pared. Sube con 3×30 s limpios. Empuja el suelo, costillas cerradas, culo metido.", guide:["Son 4 niveles; empieza en el que consigas 15 s limpios y sube cuando hagas 3×30 s.", "N1 · Pica con pies en banco: manos en el suelo, pies sobre un banco, cadera encima de los hombros, brazos estirados. Aguanta empujando el suelo.", "N2 · Apoyo de codos: igual, pero con los antebrazos en el suelo (prepara la parada de cabeza sin cargar el cuello).", "N3 · Espalda a la pared: manos a ~30 cm de la pared, sube los pies caminando por la pared hasta quedar casi vertical con la espalda hacia la pared.", "N4 · Pecho a la pared: colócate de espaldas a la pared en plancha y camina con los pies hacia arriba por la pared mientras acercas las manos, hasta quedar con el pecho mirando a la pared.", "En todos: empuja el suelo, costillas cerradas, culo metido, mira entre las manos. Apunta los segundos en Reps y el nivel en Peso (N1…N4)."], video:"handstand wall progression beginners"},
-      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 10-15 · RIR 1-2", sets:3, rest:90, note:"Con disco al pecho. Glúteo + isquios en una casilla. Puntas ligeramente afuera, squeeze arriba sin hiperextender la lumbar. Si echas de menos el curl femoral, cámbialo aquí en semanas alternas."},
-      {n:"Remo invertido en Multipower", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Barra del Smith a la altura de la cadera, cuerpo en tabla, pecho a la barra, pausa 1 s. Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso.", guide:["Coloca la barra del Smith a la altura de la cadera. Cuélgate debajo con los brazos rectos, talones en el suelo, cuerpo en tabla (glúteo y abdomen apretados).", "Tira del pecho hacia la barra juntando los omóplatos; pausa 1 s arriba; baja en 2 s.", "Cuanto más baja está la barra (o más elevados los pies), más difícil.", "Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso."], video:"remo invertido multipower tecnica"},
-      {n:"Crunch en polea alta (cuerda)", t:"3 × 8-12 · RIR 2", sets:3, rest:75, note:"De rodillas, cadera fija, enrolla el tronco llevando los codos a los muslos. Carga progresiva como cualquier ejercicio de fuerza.", guide:["De rodillas frente a la polea alta con la cuerda sujeta junto a la cabeza.", "Cadera quieta: enrolla el tronco llevando los codos hacia los muslos (flexionas la columna, no la cadera).", "Vuelve controlando en 2 s. Progresa en carga como cualquier ejercicio de fuerza."], video:"cable crunch kneeling technique"}
+      {n:"Jalón en polea alta", t:"4 × 4-6 · RIR 2-3 · PESADO", sets:4, rest:180, note:"Tu tracción principal. Agarre prono algo más ancho que los hombros, tira a la clavícula, 3 min de descanso. Hito: ~45 kg × 5 → empezamos dominadas con banda.", guide:["Tu tracción principal, hoy PESADA: 4-6 reps con 2-3 en reserva y 3 min de descanso.", "Agarre prono (palmas hacia delante) algo más ancho que los hombros.", "Pecho arriba, tira hacia la clavícula, codos hacia abajo y atrás, baja en 2 s.", "Hito: cuando muevas ~45 kg × 5, empezamos dominadas con banda."], video:"lat pulldown technique", gif:"0150-eYnzaCm.gif"},
+      {n:"Parada de manos en pared (progresión)", t:"3 × 15-30 s", sets:3, rest:120, note:"Apunta los SEGUNDOS en Reps y el nivel en Peso. Niveles: N1 pica con pies en banco · N2 apoyo de codos con pies en banco · N3 espalda a la pared (walk-up) · N4 pecho a la pared. Sube con 3×30 s limpios. Empuja el suelo, costillas cerradas, culo metido.", guide:["Son 4 niveles; empieza en el que consigas 15 s limpios y sube cuando hagas 3×30 s.", "N1 · Pica con pies en banco: manos en el suelo, pies sobre un banco, cadera encima de los hombros, brazos estirados. Aguanta empujando el suelo.", "N2 · Apoyo de codos: igual, pero con los antebrazos en el suelo (prepara la parada de cabeza sin cargar el cuello).", "N3 · Espalda a la pared: manos a ~30 cm de la pared, sube los pies caminando por la pared hasta quedar casi vertical con la espalda hacia la pared.", "N4 · Pecho a la pared: colócate de espaldas a la pared en plancha y camina con los pies hacia arriba por la pared mientras acercas las manos, hasta quedar con el pecho mirando a la pared.", "En todos: empuja el suelo, costillas cerradas, culo metido, mira entre las manos. Apunta los segundos en Reps y el nivel en Peso (N1…N4)."], video:"handstand wall progression beginners", gif:"3302-XooAdhl.gif"},
+      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 10-15 · RIR 1-2", sets:3, rest:90, note:"Con disco al pecho. Glúteo + isquios en una casilla. Puntas ligeramente afuera, squeeze arriba sin hiperextender la lumbar. Si echas de menos el curl femoral, cámbialo aquí en semanas alternas.", gif:"0489-zhMwOwE.gif"},
+      {n:"Remo invertido en Multipower", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Barra del Smith a la altura de la cadera, cuerpo en tabla, pecho a la barra, pausa 1 s. Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso.", guide:["Coloca la barra del Smith a la altura de la cadera. Cuélgate debajo con los brazos rectos, talones en el suelo, cuerpo en tabla (glúteo y abdomen apretados).", "Tira del pecho hacia la barra juntando los omóplatos; pausa 1 s arriba; baja en 2 s.", "Cuanto más baja está la barra (o más elevados los pies), más difícil.", "Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso."], video:"remo invertido multipower tecnica", gif:"0499-bZGHsAZ.gif"},
+      {n:"Crunch en polea alta (cuerda)", t:"3 × 8-12 · RIR 2", sets:3, rest:75, note:"De rodillas, cadera fija, enrolla el tronco llevando los codos a los muslos. Carga progresiva como cualquier ejercicio de fuerza.", guide:["De rodillas frente a la polea alta con la cuerda sujeta junto a la cabeza.", "Cadera quieta: enrolla el tronco llevando los codos hacia los muslos (flexionas la columna, no la cadera).", "Vuelve controlando en 2 s. Progresa en carga como cualquier ejercicio de fuerza."], video:"cable crunch kneeling technique", gif:"0175-WW95auq.gif"}
     ]
   },
   HC:{
@@ -701,9 +706,9 @@ const ROUTINE = {
     warm:"1 min de muñecas y 1 serie suave de hollow. Es la parte más específica de la semana: cada vez que tocas la posición, el sistema nervioso la aprende un poco más. Si sale 1 día, vale; si salen 2, mejor.",
     exercises:[
       {n:"Hollow body hold", t:"3 × 20-40 s", sets:3, rest:60, note:"Lumbar PEGADA al suelo, brazos junto a las orejas. Progresión: rodillas dobladas → piernas rectas altas → piernas bajas. Apunta los segundos en Reps.", guide:["Túmbate boca arriba. Pega la lumbar al suelo metiendo el culo: eso es lo que manda.", "Despega hombros y piernas del suelo, brazos junto a las orejas. El cuerpo forma una 'banana' suave.", "Si la lumbar se despega, dobla las rodillas o sube más las piernas: es la versión fácil.", "Progresión: rodillas dobladas → piernas rectas altas → piernas más bajas. Apunta los segundos en Reps."], video:"hollow body hold tutorial"},
-      {n:"Pared: pica en silla o espalda a la pared", t:"3 × 15-30 s", sets:3, rest:90, note:"Mismo nivel que el viernes en el gym (o uno menos). Apunta los segundos en Reps.", guide:["Es la misma progresión de parada del viernes, en casa.", "Pica en silla: manos en el suelo, pies sobre una silla firme, cadera encima de los hombros, brazos estirados. Aguanta 15-30 s.", "Espalda a la pared: manos a ~30 cm de la pared y sube los pies caminando por la pared hasta quedar casi vertical.", "Haz el mismo nivel que el viernes (o uno menos). Un minuto de muñecas antes."], video:"handstand wall walk beginners"},
-      {n:"Compresión sentada", t:"3 × 8-10", sets:3, rest:60, note:"Sentada, piernas rectas juntas, manos en el suelo junto a las caderas (o delante de las rodillas al principio). Eleva las piernas rectas y aguanta 1-2 s. Es el gesto de subir las piernas al pino.", guide:["Siéntate en el suelo con las piernas rectas y juntas, espalda recta.", "Manos en el suelo junto a las caderas (más fácil: delante de las rodillas, sobre los muslos).", "Empuja el suelo con las manos y eleva las piernas rectas unos centímetros. Aguanta 1-2 s y baja.", "Es exactamente el gesto de subir las piernas al pino: flexores de cadera + abdomen + empuje de hombros."], video:"seated pike compression exercise"},
-      {n:"Y prona con mancuernas ligeras", t:"3 × 10-12", sets:3, rest:45, note:"Boca abajo, brazos en Y con pulgares arriba, eleva desde el trapecio inferior sin encoger el cuello. Es rehabilitación de hombro, no de peso: 1-2 kg sobran.", guide:["Túmbate boca abajo (en el suelo o en un banco), frente apoyada, brazos estirados hacia delante formando una Y, pulgares hacia arriba.", "Eleva los brazos rectos desde la parte baja de los omóplatos (trapecio inferior). El cuello no se encoge y los brazos no se doblan.", "Baja en 2 s. Con 1-2 kg o sin peso sobra: es un ejercicio de control, no de carga."], video:"prone Y raise lower trapezius"}
+      {n:"Pared: pica en silla o espalda a la pared", t:"3 × 15-30 s", sets:3, rest:90, note:"Mismo nivel que el viernes en el gym (o uno menos). Apunta los segundos en Reps.", guide:["Es la misma progresión de parada del viernes, en casa.", "Pica en silla: manos en el suelo, pies sobre una silla firme, cadera encima de los hombros, brazos estirados. Aguanta 15-30 s.", "Espalda a la pared: manos a ~30 cm de la pared y sube los pies caminando por la pared hasta quedar casi vertical.", "Haz el mismo nivel que el viernes (o uno menos). Un minuto de muñecas antes."], video:"handstand wall walk beginners", gif:"3302-XooAdhl.gif"},
+      {n:"Compresión sentada", t:"3 × 8-10", sets:3, rest:60, note:"Sentada, piernas rectas juntas, manos en el suelo junto a las caderas (o delante de las rodillas al principio). Eleva las piernas rectas y aguanta 1-2 s. Es el gesto de subir las piernas al pino.", guide:["Siéntate en el suelo con las piernas rectas y juntas, espalda recta.", "Manos en el suelo junto a las caderas (más fácil: delante de las rodillas, sobre los muslos).", "Empuja el suelo con las manos y eleva las piernas rectas unos centímetros. Aguanta 1-2 s y baja.", "Es exactamente el gesto de subir las piernas al pino: flexores de cadera + abdomen + empuje de hombros."], video:"seated pike compression exercise", gif:"3419-UpWmA5E.gif"},
+      {n:"Y prona con mancuernas ligeras", t:"3 × 10-12", sets:3, rest:45, note:"Boca abajo, brazos en Y con pulgares arriba, eleva desde el trapecio inferior sin encoger el cuello. Es rehabilitación de hombro, no de peso: 1-2 kg sobran.", guide:["Túmbate boca abajo (en el suelo o en un banco), frente apoyada, brazos estirados hacia delante formando una Y, pulgares hacia arriba.", "Eleva los brazos rectos desde la parte baja de los omóplatos (trapecio inferior). El cuello no se encoge y los brazos no se doblan.", "Baja en 2 s. Con 1-2 kg o sin peso sobra: es un ejercicio de control, no de carga."], video:"prone Y raise lower trapezius", gif:"3541-PbzNu7c.gif"}
     ]
   },
   /* ======== v2 · agosto 2026 (solo para leer historial e importar) ======== */
@@ -731,6 +736,8 @@ const ROUTINE = {
       {n:"Dead bug", t:"3 × 8-10 por lado", sets:3, rest:45, note:""} ] }
 };
 const ORDER=["FA","FB","FC","HC"];
+/* Animaciones de referencia (uso personal, no redistribuidas): se cargan desde el dataset y el service worker las guarda para offline. */
+const GIF_BASE="https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/videos/";
 /* nombres antiguos → nuevos, para que el historial y las gráficas no se corten */
 const ALIAS={"Abducción de cadera en polea":"Abducción en máquina (inclinada adelante)"};
 const canon=n=>ALIAS[n]||n;
@@ -1243,11 +1250,11 @@ function buildSessionUI(key, opts={}){
       $("#previewMsg").textContent=`Vista previa · tienes ${ROUTINE[d.key].name} en curso`;
       ps.classList.add("hidden");
     } else if(d && d.key===key){
-      $("#previewMsg").textContent="Vista previa · esta sesión está en curso";
+      $("#previewBanner").classList.add("hidden");
       ps.classList.remove("hidden"); ps.innerHTML=`<svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Continuar ${r.name}`;
       ps.onclick=()=>{ haptic(); resumeDraft(); };
     } else {
-      $("#previewMsg").textContent="Vista previa · toca Empezar cuando estés en el gym";
+      $("#previewBanner").classList.add("hidden");
       ps.classList.remove("hidden"); ps.innerHTML=`<svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Empezar ${r.name}`;
       ps.onclick=()=>{ haptic(); preview=false; openSession(key); };
     }
@@ -1321,7 +1328,7 @@ function buildSessionUI(key, opts={}){
       ${last?`<div class="lastline"><b>Última vez</b>${last.map(s=>`<span class="ls-set">${s.w||"–"}×${s.r||"–"}</span>`).join("")}</div>`:''}
       ${hintV?`<div class="ex-note nx-hint">📌 La última vez dijiste: <b>${NEXT_TXT[hintV]}</b></div>`:''}
       ${ex.note?`<div class="ex-note">${ex.note}</div>`:''}
-      ${ex.guide?`<details class="guide"><summary>Cómo se hace<svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></summary><ol>${ex.guide.map(t=>`<li>${t}</li>`).join("")}</ol>${ex.video?`<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.video)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Ver vídeo (con conexión)</a>`:''}</details>`:''}
+      ${(ex.guide||ex.gif)?`<details class="guide"><summary>Cómo se hace<svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6"/></svg></summary>${ex.gif?`<div class="gifwrap"><img class="gif" loading="lazy" decoding="async" src="${GIF_BASE}${ex.gif}" alt="Animación de referencia"><span class="gifnote">Animación orientativa · © Gym visual</span></div>`:''}${ex.guide?`<ol>${ex.guide.map(t=>`<li>${t}</li>`).join("")}</ol>`:''}${ex.video?`<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.video)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3l14 9-14 9V3z"/></svg>Ver vídeo (con conexión)</a>`:''}</details>`:''}
       ${body}`;
     el.appendChild(card);
     if(editing && current.exercises[ei].sets.every(x=>x.done)) card.classList.add("done-ex");
@@ -1490,31 +1497,42 @@ function addSet(ei){
   const card=$(`#exerciseList .ex[data-ei="${ei}"]`);
   if(card){ const rows=$$(".set-row",card); const inp=rows.length?rows[rows.length-1].querySelector('input[data-f="w"]'):null; if(inp) inp.focus(); }
 }
-/* Desliza una serie hacia la izquierda → aparece "Borrar" */
+/* Desliza una serie hacia la izquierda (o toca su número) → aparece "Borrar".
+   Touch Events para dedo (iOS/Android) + ratón para escritorio. */
+function closeSwipes(except){ $$("#exerciseList .set-swipe.open").forEach(o=>{ if(o!==except) o.classList.remove("open"); }); }
 function bindSwipe(el){
-  let x0=0,y0=0,dx=0,drag=false,axis=null;
   const row=el.querySelector(".set-row"); if(!row) return;
-  el.addEventListener("touchstart",e=>{
-    const t=e.touches[0]; x0=t.clientX; y0=t.clientY; dx=0; axis=null; drag=false;
-    $$("#exerciseList .set-swipe.open").forEach(o=>{ if(o!==el) o.classList.remove("open"); });
-  },{passive:true});
-  el.addEventListener("touchmove",e=>{
-    const t=e.touches[0]; const mx=t.clientX-x0, my=t.clientY-y0;
-    if(!axis){ if(Math.abs(mx)<6 && Math.abs(my)<6) return; axis=Math.abs(mx)>Math.abs(my)?"x":"y"; }
-    if(axis!=="x") return;
+  let x0=0,y0=0,dx=0,axis=null,drag=false,active=false;
+  const begin=(x,y)=>{ x0=x; y0=y; dx=0; axis=null; drag=false; active=true; };
+  const move=(x,y)=>{
+    if(!active) return false;
+    const mx=x-x0, my=y-y0;
+    if(!axis){ if(Math.abs(mx)<8 && Math.abs(my)<8) return false; axis=Math.abs(mx)>Math.abs(my)?"x":"y"; if(axis==="x") closeSwipes(el); }
+    if(axis!=="x") return false;
     drag=true; el.classList.add("dragging");
     const base=el.classList.contains("open")?-88:0;
     dx=Math.max(-100, Math.min(20, base+mx));
     row.style.transform=`translateX(${dx}px)`;
-  },{passive:true});
+    return true;
+  };
   const end=()=>{
-    el.classList.remove("dragging");
-    if(!drag){ return; }
+    if(!active) return; active=false; el.classList.remove("dragging");
+    if(!drag) return;
     row.style.transform="";
     if(dx<-44){ el.classList.add("open"); haptic(); } else { el.classList.remove("open"); }
     drag=false;
   };
-  el.addEventListener("touchend",end); el.addEventListener("touchcancel",end);
+  // dedo
+  el.addEventListener("touchstart",e=>{ const t=e.touches[0]; begin(t.clientX,t.clientY); },{passive:true});
+  el.addEventListener("touchmove",e=>{ const t=e.touches[0]; if(move(t.clientX,t.clientY) && e.cancelable) e.preventDefault(); },{passive:false});
+  el.addEventListener("touchend",end,{passive:true}); el.addEventListener("touchcancel",end,{passive:true});
+  // ratón (escritorio)
+  el.addEventListener("mousedown",e=>{ if(e.button!==0 || ("ontouchstart" in window)) return; begin(e.clientX,e.clientY);
+    const mm=ev=>move(ev.clientX,ev.clientY); const mu=()=>{ end(); window.removeEventListener("mousemove",mm); window.removeEventListener("mouseup",mu); };
+    window.addEventListener("mousemove",mm); window.addEventListener("mouseup",mu); });
+  // alternativa sin gesto: tocar el número de la serie muestra/oculta "Borrar"
+  const no=row.querySelector(".set-no");
+  if(no){ no.addEventListener("click",()=>{ if(drag) return; haptic(); const open=el.classList.contains("open"); closeSwipes(el); el.classList.toggle("open", !open); }); }
 }
 function removeSetAt(ei,si){
   if(!current) return;
