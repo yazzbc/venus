@@ -634,58 +634,83 @@ textarea::placeholder{color:var(--ink-400);}
 
 <script>
 /* ============================================================
-   VENUS · App de seguimiento — rutina 4 días v2 (agosto 2026)
+   VENUS · App de seguimiento — rutina v3: 3 full body fuerza aérea + casa (octubre 2026)
    Sistema visual "Aurora" v1 · lógica y datos intactos
    ============================================================ */
 const ROUTINE = {
-  A:{
-    key:"A", label:"Lower A", day:"Lun", mins:55,
-    name:"Lower A", focus:"Cadera-dominante · hip thrust pesado",
-    warm:"Calienta: 3-5 min cardio suave + clamshells con banda 1×15/lado + puente de glúteo 1×15.",
+  /* ======== v3 · octubre 2026 · 3 full body con prioridad FUERZA tren superior + core ======== */
+  FA:{
+    key:"FA", label:"Full A", day:"Lun", mins:55, gym:true,
+    name:"Full A", focus:"Empuje invertido + glúteo + anti-extensión",
+    warm:"Calienta 5-6 min: cardio suave · muñecas (cuadrupedia: balanceos 2×10 + isometría 2×15 s) · wall slide 2×10 · puente de glúteo con miniband 1×15 + clamshells 1×12/lado.",
     exercises:[
-      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 10-15", sets:3, rest:75, note:"Torso MUY inclinado: pecho hacia las rodillas, bisagra de cadera, espalda neutra. Pies NEUTROS. Pausa 1-2 s en la apertura, bajada 2-3 s. Pesada y progresiva: es un ejercicio principal."},
-      {n:"Hip thrust (máquina)", t:"4 × 6-10", sets:4, rest:150, note:"ANCLA PESADA (Fase 3 🔓). Sube carga al llegar a 10 reps limpias. Pelvis neutra arriba, squeeze 1 s. Si el glúteo izq. avisa (>2-3/10): 8-12 con RIR 2 ese día y anótalo."},
-      {n:"Belt squat", t:"3 × 8-12", sets:3, rest:120, note:"Profunda, stance medio-ancho, puntas ligeramente afuera. Si la rodilla derecha molesta, recorta profundidad ese día y anótalo."},
-      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:"Cadera PEGADA al banco todo el rato, rango completo, bajada 2-3 s."},
-      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 12-15", sets:3, rest:90, note:"Puntas ligeramente afuera, aprieta el glúteo arriba sin hiperextender la lumbar. Progresa con disco al pecho."}
+      {n:"Pike push-up (progresión de parada)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Pica cerrada, cadera arriba, la cabeza toca el suelo delante de las manos. Empuja 'alejando el suelo' al final. Niveles: pies en suelo → step → banco → banco con cadera sobre hombros. Sube de nivel con 4×8 @RIR2. Apunta el nivel en Peso (p. ej. 'N2')."},
+      {n:"Hip thrust (máquina)", t:"4 × 8-12 · RIR 1-2", sets:4, rest:120, note:"Tu ancla de glúteo: NO bajes carga, es lo que mantiene el músculo en déficit. Pelvis neutra arriba, squeeze 1 s."},
+      {n:"Remo en polea baja", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Ahora es fuerza: carga alta, sin balanceo. Pausa 1 s con los omóplatos juntos y abajo."},
+      {n:"Rueda abdominal (rodillas)", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Culo metido (retroversión) y glúteo apretado TODA la rep; nada de arquear la lumbar. Sal solo hasta donde controles. Progresión: más lejos → pies contra la pared → de pie. Apunta la distancia o el nivel en Peso."},
+      {n:"Face pull en polea alta (cuerda)", t:"3 × 10-15 · RIR 2", sets:3, rest:60, note:"Codos altos, termina rotando hacia fuera. Tu correctivo de hombros en rotación interna."}
     ]
   },
-  U:{
-    key:"U", label:"Upper", day:"Mié", mins:45,
-    name:"Upper", focus:"Tren superior + correctivos posturales",
-    warm:"Calienta: rotación externa con banda 2×15/lado + movilidad de hombro.",
+  FB:{
+    key:"FB", label:"Full B", day:"Mié", mins:60, gym:true,
+    name:"Full B", focus:"Press vertical + tracción + belt squat + compresión colgada",
+    warm:"Calienta 5-6 min: cardio suave · muñecas 2×10 + isometría 2×15 s · rotación externa con banda 2×15/lado · wall slide 2×10 · puente con miniband 1×15.",
     exercises:[
-      {n:"Press de pecho (máquina)", t:"3 × 10-12", sets:3, rest:90, note:"Junta ligeramente los omóplatos antes de empujar."},
-      {n:"Remo en polea baja", t:"3 × 10-12", sets:3, rest:90, note:"Codos hacia atrás, retrae los omóplatos al final."},
-      {n:"Press de hombro (máquina)", t:"3 × 8-15", sets:3, rest:90, note:"No encojas los trapecios. La placa siguiente es un salto grande: agota el rango hasta 15 reps con bajada de 3 s antes de subir carga."},
-      {n:"Jalón en polea alta", t:"3 × 10-12", sets:3, rest:90, note:"Pecho arriba, tira hacia la clavícula."},
-      {n:"Face pull en polea alta (cuerda)", t:"3 × 12-15", sets:3, rest:60, note:"Tira hacia la cara, codos altos, termina rotando hacia fuera."}
+      {n:"Press de hombro (máquina)", t:"4 × 4-8 · RIR 2-3", sets:4, rest:150, note:"Con 4-8 reps la siguiente placa ya es viable: prueba hoy. Costillas abajo, sin encoger trapecios. Descansa 2-3 min de verdad."},
+      {n:"Jalón agarre neutro", t:"4 × 6-8 · RIR 2-3", sets:4, rest:150, note:"Agarre neutro o supino. Pecho arriba, codos hacia las costillas, baja en 2 s."},
+      {n:"Belt squat", t:"4 × 8-12 · RIR 1-2", sets:4, rest:120, note:"Tu favorita, pesada. Profunda, rodillas siguiendo el pie. Rodilla derecha: si molesta, recorta profundidad y anótalo."},
+      {n:"Elevación de rodillas colgada", t:"3 × 6-12 · RIR 2", sets:3, rest:90, note:"Barra de dominadas. Hombros activos, rodillas al pecho METIENDO la pelvis, baja en 2-3 s. Progresión: rodillas → piernas rectas → tobilleras. Tras la última serie quédate colgada hasta ~5 s antes de soltar y apunta los segundos en Notas."},
+      {n:"Press de pecho (máquina)", t:"3 × 6-10 · RIR 2", sets:3, rest:90, note:"Secundario. Omóplatos juntos antes de empujar."}
     ]
   },
-  B:{
-    key:"B", label:"Lower B", day:"Vie", mins:55,
-    name:"Lower B", focus:"Belt squat pesada + abducción · glute shelf",
-    warm:"Calienta: 3-5 min cardio + clamshells con banda 1×15/lado + puente de glúteo 1×15.",
+  FC:{
+    key:"FC", label:"Full C", day:"Vie", mins:60, gym:true,
+    name:"Full C", focus:"Tracción pesada + parada en pared + glúteo/isquio",
+    warm:"Calienta 5-6 min: cardio suave · muñecas 2×10 + isometría 2×15 s · wall slide 2×10 · colgada suave 2×10 s · puente con miniband 1×15.",
     exercises:[
-      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 12-15", sets:3, rest:75, note:"Igual que el lunes: torso MUY inclinado, pies neutros, pausa 1-2 s. Zona alta del rango de reps."},
-      {n:"Belt squat", t:"4 × 8-12", sets:4, rest:150, note:"Tu día pesado de belt squat. Rango profundo, valgo controlado."},
-      {n:"Hip thrust con miniband (+ aberturas)", t:"3 × 10-12", sets:3, rest:90, note:"Miniband sobre las rodillas, empujándola afuera TODA la serie. Carga moderada (~60-70% de tu HT pesado). Al acabar cada serie, mantén el puente arriba y haz 8-10 aberturas de rodillas. Tu ejercicio 'shelf'."},
-      {n:"Leg extension", t:"3 × 12-15", sets:3, rest:90, note:"Rodilla alineada con la punta del pie, squeeze 1 s arriba. Si el respaldo se reclina, recuéstalo un poco (más recto femoral)."},
-      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:"Cadera pegada al banco, rango completo, bajada 2-3 s."}
+      {n:"Jalón en polea alta", t:"4 × 4-6 · RIR 2-3 · PESADO", sets:4, rest:180, note:"Tu tracción principal. Agarre prono algo más ancho que los hombros, tira a la clavícula, 3 min de descanso. Hito: ~45 kg × 5 → empezamos dominadas con banda."},
+      {n:"Parada de manos en pared (progresión)", t:"3 × 15-30 s", sets:3, rest:120, note:"Apunta los SEGUNDOS en Reps y el nivel en Peso. Niveles: N1 pica con pies en banco · N2 apoyo de codos con pies en banco · N3 espalda a la pared (walk-up) · N4 pecho a la pared. Sube con 3×30 s limpios. Empuja el suelo, costillas cerradas, culo metido."},
+      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 10-15 · RIR 1-2", sets:3, rest:90, note:"Con disco al pecho. Glúteo + isquios en una casilla. Puntas ligeramente afuera, squeeze arriba sin hiperextender la lumbar. Si echas de menos el curl femoral, cámbialo aquí en semanas alternas."},
+      {n:"Remo invertido en Multipower", t:"3 × 6-10 · RIR 2", sets:3, rest:120, note:"Barra del Smith a la altura de la cadera, cuerpo en tabla, pecho a la barra, pausa 1 s. Progresión: barra más baja → pies en banco → disco en el pecho. Apunta el nivel en Peso."},
+      {n:"Crunch en polea alta (cuerda)", t:"3 × 8-12 · RIR 2", sets:3, rest:75, note:"De rodillas, cadera fija, enrolla el tronco llevando los codos a los muslos. Carga progresiva como cualquier ejercicio de fuerza."}
     ]
   },
-  H:{
-    key:"H", label:"Casa", day:"Dom", mins:15,
-    name:"Casa mini", focus:"Glúteo medio + empuje + core · 10-15 min · bonus",
-    warm:"Calienta: 1 serie suave del primer ejercicio y listo. Es un día bonus: si una semana no sale, no rompe nada. El estímulo está en acercarse al fallo.",
+  HC:{
+    key:"HC", label:"Casa", day:"Jue/Dom", mins:20,
+    name:"Casa · core y habilidades", focus:"Hollow + pared + compresión + trapecio inferior · 20 min · 1-2×/semana",
+    warm:"1 min de muñecas y 1 serie suave de hollow. Es la parte más específica de la semana: cada vez que tocas la posición, el sistema nervioso la aprende un poco más. Si sale 1 día, vale; si salen 2, mejor.",
     exercises:[
-      {n:"Lateral band walk (banda en tobillos)", t:"3 × 15 pasos por lado", sets:3, rest:45, note:"Semisentadilla, pasos cortos, pelvis nivelada, pies neutros. La banda en tobillos activa más glúteo medio que en rodillas."},
-      {n:"Lagartijas (progresión)", t:"3 × deja 1-2 en reserva", sets:3, rest:90, note:"Niveles: manos en mesa → rodillas → completas → pies elevados. Sube de nivel al pasar de ~15 limpias. Cuerpo en tabla: aprieta glúteo y abdomen."},
-      {n:"Dead bug", t:"3 × 8-10 por lado", sets:3, rest:45, note:"Lumbar pegada al suelo TODO el tiempo. Tu correctivo antiextensión."}
+      {n:"Hollow body hold", t:"3 × 20-40 s", sets:3, rest:60, note:"Lumbar PEGADA al suelo, brazos junto a las orejas. Progresión: rodillas dobladas → piernas rectas altas → piernas bajas. Apunta los segundos en Reps."},
+      {n:"Pared: pica en silla o espalda a la pared", t:"3 × 15-30 s", sets:3, rest:90, note:"Mismo nivel que el viernes en el gym (o uno menos). Apunta los segundos en Reps."},
+      {n:"Compresión sentada", t:"3 × 8-10", sets:3, rest:60, note:"Sentada, piernas rectas juntas, manos en el suelo junto a las caderas (o delante de las rodillas al principio). Eleva las piernas rectas y aguanta 1-2 s. Es el gesto de subir las piernas al pino."},
+      {n:"Y prona con mancuernas ligeras", t:"3 × 10-12", sets:3, rest:45, note:"Boca abajo, brazos en Y con pulgares arriba, eleva desde el trapecio inferior sin encoger el cuello. Es rehabilitación de hombro, no de peso: 1-2 kg sobran."}
     ]
-  }
+  },
+  /* ======== v2 · agosto 2026 (solo para leer historial e importar) ======== */
+  A:{ key:"A", label:"Lower A", day:"Lun", mins:55, legacy:true, name:"Lower A", focus:"Cadera-dominante · hip thrust pesado", warm:"", exercises:[
+      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 10-15", sets:3, rest:75, note:""},
+      {n:"Hip thrust (máquina)", t:"4 × 6-10", sets:4, rest:150, note:""},
+      {n:"Belt squat", t:"3 × 8-12", sets:3, rest:120, note:""},
+      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:""},
+      {n:"Hiperextensión (énfasis glúteo)", t:"3 × 12-15", sets:3, rest:90, note:""} ] },
+  U:{ key:"U", label:"Upper", day:"Mié", mins:45, legacy:true, name:"Upper", focus:"Tren superior + correctivos posturales", warm:"", exercises:[
+      {n:"Press de pecho (máquina)", t:"3 × 10-12", sets:3, rest:90, note:""},
+      {n:"Remo en polea baja", t:"3 × 10-12", sets:3, rest:90, note:""},
+      {n:"Press de hombro (máquina)", t:"3 × 8-15", sets:3, rest:90, note:""},
+      {n:"Jalón en polea alta", t:"3 × 10-12", sets:3, rest:90, note:""},
+      {n:"Face pull en polea alta (cuerda)", t:"3 × 12-15", sets:3, rest:60, note:""} ] },
+  B:{ key:"B", label:"Lower B", day:"Vie", mins:55, legacy:true, name:"Lower B", focus:"Belt squat pesada + abducción · glute shelf", warm:"", exercises:[
+      {n:"Abducción en máquina (inclinada adelante)", t:"3 × 12-15", sets:3, rest:75, note:""},
+      {n:"Belt squat", t:"4 × 8-12", sets:4, rest:150, note:""},
+      {n:"Hip thrust con miniband (+ aberturas)", t:"3 × 10-12", sets:3, rest:90, note:""},
+      {n:"Leg extension", t:"3 × 12-15", sets:3, rest:90, note:""},
+      {n:"Curl femoral acostado", t:"3 × 10-12", sets:3, rest:90, note:""} ] },
+  H:{ key:"H", label:"Casa", day:"Dom", mins:15, legacy:true, name:"Casa mini", focus:"Glúteo medio + empuje + core · 10-15 min · bonus", warm:"", exercises:[
+      {n:"Lateral band walk (banda en tobillos)", t:"3 × 15 pasos por lado", sets:3, rest:45, note:""},
+      {n:"Lagartijas (progresión)", t:"3 × deja 1-2 en reserva", sets:3, rest:90, note:""},
+      {n:"Dead bug", t:"3 × 8-10 por lado", sets:3, rest:45, note:""} ] }
 };
-const ORDER=["A","U","B","H"];
+const ORDER=["FA","FB","FC","HC"];
 /* nombres antiguos → nuevos, para que el historial y las gráficas no se corten */
 const ALIAS={"Abducción de cadera en polea":"Abducción en máquina (inclinada adelante)"};
 const canon=n=>ALIAS[n]||n;
@@ -778,7 +803,7 @@ function computeStreak(){
 }
 function suggestKey(){
   const last=workouts[0];
-  if(!last) return "A";
+  if(!last) return ORDER[0];
   const i=ORDER.indexOf(last.key);
   return ORDER[(i+1)%ORDER.length];
 }
@@ -786,8 +811,8 @@ function doneThisWeek(k){
   const sow=startOfWeek(Date.now());
   return workouts.find(w=>w.key===k && w.ts>=sow) || null;
 }
-function lastLegHours(){
-  const w=workouts.find(w=>w.key==="A"||w.key==="B");
+function lastGymHours(){
+  const w=workouts.find(w=>ROUTINE[w.key] && ROUTINE[w.key].gym);
   if(!w) return null;
   return (Date.now()-w.ts)/3600000;
 }
@@ -929,7 +954,7 @@ function openSwapSheet(){
   const list=$("#swapList"); list.innerHTML="";
   const suggest=suggestKey();
   const draft=loadDraft();
-  const legH=lastLegHours();
+  const gymH=lastGymHours();
   ORDER.forEach(k=>{
     const r=ROUTINE[k];
     const w=doneThisWeek(k);
@@ -937,7 +962,7 @@ function openSwapSheet(){
     if(draft && draft.key===k) chip=`<span class="sh-chip cur">En curso</span>`;
     else if(k===suggest) chip=`<span class="sh-chip rec">Recomendada</span>`;
     else if(w) chip=`<span class="sh-chip done">✓ ${relDate(w.ts)}</span>`;
-    else if((k==="A"||k==="B") && legH!=null && legH<48) chip=`<span class="sh-chip warn">Pierna hace ${Math.round(legH)} h</span>`;
+    else if(r.gym && gymH!=null && gymH<20) chip=`<span class="sh-chip warn">Gym hace ${Math.round(gymH)} h</span>`;
     else chip=`<span class="sh-chip">Lista</span>`;
     const row=document.createElement("div");
     row.className="sh-row";
