@@ -2,9 +2,9 @@
    Estrategia: la página (index.html) va RED PRIMERO (si hay internet, siempre
    la última versión publicada; si no, la copia cacheada → offline intacto).
    El resto de recursos van caché primero. */
-const CACHE = "venus-v22";
+const CACHE = "venus-v23";
 const MEDIA = "venus-media-v1"; // animaciones de ejercicios: caché aparte, sobrevive a las versiones
-const ASSETS = ["./", "./index.html", "./manifest.json"];
+const ASSETS = ["./", "./index.html", "./manifest.json", "./media/pike-push-up.webp", "./media/hollow-hold.webp", "./media/hip-thrust.webp", "./media/handstand-wall.webp"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
