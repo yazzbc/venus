@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Venus">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
 <link rel="manifest" href="./manifest.json">
 <title>Venus · Entrenamiento</title>
 <style>
@@ -245,6 +246,10 @@ body.in-session #sessBar{display:block;}
 .ex-menu:active{background:var(--surface-2);}
 .ex-menu svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;}
 .ex-sub{font-size:12px;color:var(--accent-ink);font-weight:500;margin-top:3px;}
+/* «La última vez saltaste X»: fila secundaria, sin color nuevo */
+.carry-row{margin-top:12px;display:flex;align-items:center;gap:12px;padding:2px 8px 2px 16px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);font-size:13px;color:var(--ink-2);line-height:1.4;}
+.carry-row .cr-txt{flex:1;min-width:0;padding:10px 0;}
+.carry-add{font-size:14px;font-weight:600;color:var(--accent-ink);min-height:44px;display:inline-flex;align-items:center;padding:0 8px;white-space:nowrap;}
 .ex.skipped{opacity:.55;}
 .ex.skipped .ex-head{padding-bottom:16px;cursor:default;}
 .ex.skipped .ex-note,.ex.skipped .ex-note-more,.ex.skipped .lastline,.ex.skipped .guide,.ex.skipped .sets,.ex.skipped .next-row,.ex.skipped .ex-target,.ex.skipped .ex-note-wrap{display:none;}
@@ -1454,9 +1459,39 @@ function newCurrent(key){
 function exDef(ei){
   const e=current.exercises[ei];
   const list=ROUTINE[current.key].exercises;
-  let base=list[ei] && list[ei].n===e.n ? list[ei] : (list.find(x=>canon(x.n)===canon(e.n)) || {n:e.n, t:"", sets:e.sets.length, rest:90, note:""});
+  const src=e.carry && ROUTINE[e.carry] ? ROUTINE[e.carry].exercises.find(x=>canon(x.n)===canon(e.n)) : null;
+  let base=list[ei] && list[ei].n===e.n ? list[ei] : (list.find(x=>canon(x.n)===canon(e.n)) || src || {n:e.n, t:"", sets:e.sets.length, rest:90, note:""});
   if(e.sub) return Object.assign({}, base, {n:e.sub.n, t:e.sub.t||"", rest:e.sub.rest||base.rest, gif:e.sub.gif||null, img:e.sub.img||null, credit:e.sub.img?"Ilustración: wger.de · CC BY-SA 4.0":"", note:e.sub.why||"", guide:null, video:null});
   return base;
+}
+/* «La última vez saltaste X en Y»: del ÚLTIMO entreno guardado del mismo tipo (gym/casa), los saltados que hoy no están en la sesión. Sin estado nuevo. */
+function isGymDay(r){ return !!(r && r.gym); }
+function dayName(k){ return ROUTINE[k] ? ROUTINE[k].name : k; }
+function pendingSkips(){
+  if(!current || preview || editingTs) return [];
+  const r=ROUTINE[current.key]; if(!r) return [];
+  const w=workouts.find(x=>ROUTINE[x.key] && isGymDay(ROUTINE[x.key])===isGymDay(r));
+  if(!w) return [];
+  const here=new Set(); current.exercises.forEach(e=>{ here.add(canon(e.n)); if(e.sub) here.add(canon(e.sub.n)); });
+  const out=[];
+  (w.exercises||[]).forEach(ex=>{
+    if(!ex.skipped) return;
+    const n=ex.orig||ex.n;
+    if(here.has(canon(n)) || out.some(o=>canon(o.n)===canon(n))) return;
+    out.push({n, key:w.key});
+  });
+  return out.slice(0,3);
+}
+function addCarry(p){
+  if(!current) return;
+  const src=ROUTINE[p.key];
+  const def=(src && src.exercises.find(x=>canon(x.n)===canon(p.n))) || {n:p.n, t:"", sets:3, rest:90};
+  current.exercises.push({n:def.n, next:null, carry:p.key, sets:Array.from({length:def.sets||3},()=>({w:"",r:"",rir:"",done:false}))});
+  buildSessionUI(current.key,{keepScroll:true}); updateProgress(); paintActive();
+  const card=$(`#exerciseList .ex[data-ei="${current.exercises.length-1}"]`);
+  if(card) setTimeout(()=>card.scrollIntoView({behavior:"smooth",block:"start"}),60);
+  haptic(); toast("Añadido al final");
+  saveDraft();
 }
 function hasData(c){ return !!c && (c.startedAt || c.feel || (c.notes&&c.notes.trim()) || c.exercises.some(e=>e.sets.some(s=>s.done||s.w||s.r||s.rir))); }
 
@@ -1510,6 +1545,13 @@ function buildSessionUI(key, opts={}){
     warm.innerHTML=`<summary>Calentamiento${ICON_DOWN}</summary><p>${r.warm}</p>`;
     el.appendChild(warm);
   }
+  pendingSkips().forEach(p=>{
+    const row=document.createElement("div");
+    row.className="carry-row";
+    row.innerHTML=`<span class="cr-txt">La última vez saltaste ${escapeHtml(p.n)} en ${escapeHtml(dayName(p.key))}</span><button class="carry-add">Añadir hoy</button>`;
+    row.querySelector(".carry-add").addEventListener("click",()=>addCarry(p));
+    el.appendChild(row);
+  });
 
   const defs = editing ? current.exercises.map((_,i)=>exDef(i)) : r.exercises;
   defs.forEach((ex,ei)=>{
@@ -1555,7 +1597,7 @@ function buildSessionUI(key, opts={}){
     const noteLong = ex.note && ex.note.length>120;
     card.innerHTML=`
       <div class="ex-head"><div class="ex-idx">${ei+1}</div>
-        <div class="ex-titles"><div class="ex-name">${ex.n}</div>${cur&&cur.sub?`<div class="ex-sub">En lugar de ${escapeHtml(cur.n)}</div>`:''}<div class="ex-target">${ex.t}</div><div class="ex-summary">${editing?(cur.skipped?"Saltado":exSummaryText(ei)):""}</div></div>${m?`<button class="ex-thumb" data-ei="${ei}" aria-label="Ver cómo se hace"><img loading="lazy" decoding="async" src="${m.src}" alt=""></button>`:''}${editing?`<button class="ex-menu" data-ei="${ei}" aria-label="Opciones del ejercicio"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></button>`:''}</div>
+        <div class="ex-titles"><div class="ex-name">${ex.n}</div>${cur&&cur.sub?`<div class="ex-sub">En lugar de ${escapeHtml(cur.n)}</div>`:cur&&cur.carry?`<div class="ex-sub">Pendiente de ${escapeHtml(dayName(cur.carry))}</div>`:''}<div class="ex-target">${ex.t}</div><div class="ex-summary">${editing?(cur.skipped?"Saltado":exSummaryText(ei)):""}</div></div>${m?`<button class="ex-thumb" data-ei="${ei}" aria-label="Ver cómo se hace"><img loading="lazy" decoding="async" src="${m.src}" alt=""></button>`:''}${editing?`<button class="ex-menu" data-ei="${ei}" aria-label="Opciones del ejercicio"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></button>`:''}</div>
       ${ex.note?`<p class="ex-note${noteLong?' clamp':''}" data-ei="${ei}">${ex.note}</p>${noteLong?`<span class="ex-note-more" data-ei="${ei}">Leer más</span>`:''}`:''}
       ${last?`<div class="lastline">Última vez${last.map(s=>`<span class="ls-set">${s.w||"–"}×${s.r||"–"}</span>`).join("")}${sug?`<span class="ls-next">· hoy ${sug.w} × ${sug.r}</span>`:hintV?`<span class="ls-next">· ${NEXT_TXT[hintV]} peso</span>`:''}</div>`:''}
       ${(ex.guide||m)?`<details class="guide"><summary>Cómo se hace${ICON_DOWN}</summary>${m?`<div class="gifwrap"><img class="gif${ex.img?' wide':''}" loading="lazy" decoding="async" src="${m.src}" alt="Referencia visual"><span class="gifnote">${m.credit}</span></div>`:''}${ex.guide?`<ol>${ex.guide.map(t=>`<li>${t}</li>`).join("")}</ol>`:''}${ex.video?`<a class="vid" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.video)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>Buscar vídeo</a>`:''}</details>`:''}
@@ -1790,7 +1832,7 @@ function openSetSheet(ei,si){
   haptic();
   const s=current.exercises[ei].sets[si];
   const body=$("#setSheetBody"); body.innerHTML="";
-  $("#setSheetTitle").textContent=`${ROUTINE[current.key].exercises[ei].n} · serie ${si+1}`;
+  $("#setSheetTitle").textContent=`${exDef(ei).n} · serie ${si+1}`;
   const mk=(label,sub,cls,fn)=>{ const b=document.createElement("button"); b.className="opt"+(cls?" "+cls:""); b.innerHTML=`<div class="opt-txt"><div class="ot">${label}</div>${sub?`<div class="os">${sub}</div>`:""}</div>`; b.onclick=()=>{ closeSheet(); setTimeout(fn,120); }; body.appendChild(b); };
   if(s.warm) mk("Convertir en serie efectiva","Vuelve a contar para el progreso",null,()=>{ s.warm=false; saveDraft(); buildSessionUI(current.key,{keepScroll:true}); updateProgress(); });
   else mk("Marcar como calentamiento","No cuenta para el progreso",null,()=>{ s.warm=true; saveDraft(); buildSessionUI(current.key,{keepScroll:true}); updateProgress(); });
@@ -1893,6 +1935,7 @@ function recordExercises(){
     n:e.sub?e.sub.n:e.n,
     ...(e.sub?{orig:e.n, t:e.sub.t||""}:{}),
     ...(e.skipped?{skipped:true}:{}),
+    ...(e.carry?{carry:e.carry}:{}),
     ...(e.note&&e.note.trim()?{note:e.note.trim()}:{}),
     next:e.next||null,
     sets:e.sets.map(s=>({w:s.w, r:s.r, rir:s.rir, done:s.done, ...(s.warm?{warm:true}:{})}))
@@ -1924,6 +1967,7 @@ function editRecord(w){
     const base={ n: ex.orig||ex.n, next:ex.next||null, sets:ex.sets.map(s=>({w:s.w||"", r:s.r||"", rir:s.rir||"", done:!!s.done, ...(s.warm?{warm:true}:{})})) };
     if(ex.skipped) base.skipped=true;
     if(ex.note) base.note=ex.note;
+    if(ex.carry) base.carry=ex.carry;
     if(ex.orig){ const a=(ALT[ex.orig]||[]).find(x=>x.n===ex.n); base.sub = a ? {n:a.n,t:a.t,rest:a.rest,gif:a.gif||null,img:a.img||null,why:a.why} : {n:ex.n,t:ex.t||"",rest:90,why:"Sustituto elegido ese día"}; }
     return base;
   });
@@ -1975,6 +2019,7 @@ function showSummary(rec, s){
     html+=`<div class="section-hd" style="margin:16px 0 4px;padding:0"><h2>Nuevas marcas</h2></div>`+s.prs.map(p=>`<div class="sum-pr">${stateIcon("done")}<b>${escapeHtml(p.n)}</b><span>${fmtKg(p.v)} kg · antes ${fmtKg(p.prev)}</span></div>`).join("");
   }
   if(s.skipped.length) html+=`<div class="sum-line"><span>Saltado</span><b>${s.skipped.map(escapeHtml).join(", ")}</b></div>`;
+  rec.exercises.filter(e=>e.carry && !e.skipped).forEach(e=>{ html+=`<div class="sum-line"><span>Pendiente de ${escapeHtml(dayName(e.carry))}</span><b>${escapeHtml(e.n)}</b></div>`; });
   $("#sumBody").innerHTML=html;
   openSheet("#summarySheet");
 }
@@ -1995,7 +2040,7 @@ function showDetail(w){
     const div=document.createElement("div");
     div.className="detail-ex";
     const chips=ex.skipped ? `<span class="chip">Saltado</span>` : filled.map(s=>`<span class="chip">${s.warm?"C · ":""}${s.w||"—"} kg × ${s.r||"—"}${s.rir!==""&&s.rir!=null?" · RIR "+s.rir:""}</span>`).join("");
-    div.innerHTML=`<div class="dn">${escapeHtml(ex.n)}${ex.orig?` <span class="t-caption">· en lugar de ${escapeHtml(ex.orig)}</span>`:""}${ex.next?` <span class="t-caption">· ${NEXT_TXT[ex.next]} peso</span>`:""}</div><div class="detail-sets">${chips}</div>${ex.note?`<p style="font-size:13px;color:var(--ink-2);margin-top:6px">${escapeHtml(ex.note)}</p>`:""}`;
+    div.innerHTML=`<div class="dn">${escapeHtml(ex.n)}${ex.orig?` <span class="t-caption">· en lugar de ${escapeHtml(ex.orig)}</span>`:""}${ex.carry?` <span class="t-caption">· pendiente de ${escapeHtml(dayName(ex.carry))}</span>`:""}${ex.next?` <span class="t-caption">· ${NEXT_TXT[ex.next]} peso</span>`:""}</div><div class="detail-sets">${chips}</div>${ex.note?`<p style="font-size:13px;color:var(--ink-2);margin-top:6px">${escapeHtml(ex.note)}</p>`:""}`;
     body.appendChild(div);
   });
   $("#detailEdit").onclick=()=>{ haptic(); editRecord(w); };
@@ -2035,7 +2080,7 @@ function buildSummary(){
       const filled=ex.sets.filter(s=>s.done||s.w||s.r);
       if(ex.skipped){ out+=`• ${ex.n}: SALTADO\n`; return; }
       if(!filled.length) return;
-      out+=`• ${ex.n}${ex.orig?` (en lugar de ${ex.orig})`:""}: `+filled.map(s=>`${s.w||"-"}kg×${s.r||"-"}${s.rir!==""&&s.rir!=null?`(RIR${s.rir})`:""}`).join(", ")+(ex.next?` → ${NEXT_TXT[ex.next]}`:"")+(ex.note?` · nota: ${ex.note}`:"")+`\n`;
+      out+=`• ${ex.n}${ex.orig?` (en lugar de ${ex.orig})`:""}${ex.carry?` (pendiente de ${dayName(ex.carry)})`:""}: `+filled.map(s=>`${s.w||"-"}kg×${s.r||"-"}${s.rir!==""&&s.rir!=null?`(RIR${s.rir})`:""}`).join(", ")+(ex.next?` → ${NEXT_TXT[ex.next]}`:"")+(ex.note?` · nota: ${ex.note}`:"")+`\n`;
     });
     if(w.notes) out+=`  Notas: ${w.notes}\n`;
   });
