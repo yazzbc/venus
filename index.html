@@ -1215,7 +1215,7 @@ function proteinBarsSVG(){
 
 /* ---------- Medidas corporales ---------- */
 let measures=loadMeas();
-function loadMeas(){ try{ return JSON.parse(localStorage.getItem(MEAS_STORE)) || []; }catch(e){ return []; } }
+function loadMeas(){ try{ const v=JSON.parse(localStorage.getItem(MEAS_STORE)) || []; return Array.isArray(v)? v.sort((a,b)=>b.ts-a.ts) : []; }catch(e){ return []; } }
 function persistMeas(){ localStorage.setItem(MEAS_STORE, JSON.stringify(measures)); }
 function fmtNum(n){ return n==null? "–" : String(Math.round(n*10)/10).replace(".",","); }
 function openMeasSheet(){
@@ -1236,6 +1236,7 @@ function deleteMeas(ts){
   measures=measures.filter(m=>m.ts!==ts); persistMeas(); renderProgressView();
 }
 function renderMeasures(body){
+  measures.sort((a,b)=>b.ts-a.ts); // siempre de más reciente a más antigua
   const hd=document.createElement("div"); hd.className="section-hd"; hd.style.marginTop="32px";
   hd.innerHTML=`<h2>Medidas</h2><button class="link" id="measAdd">Añadir</button>`;
   body.appendChild(hd);
